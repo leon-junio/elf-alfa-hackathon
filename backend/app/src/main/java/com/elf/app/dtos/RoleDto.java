@@ -5,5 +5,6 @@ import lombok.NonNull;
 public record RoleDto(
         @NonNull String id,
         @NonNull String name,
-        int cbo
+        int cbo,
+        @NonNull String code
 ) {}

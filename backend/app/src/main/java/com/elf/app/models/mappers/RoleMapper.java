@@ -12,7 +12,8 @@ public class RoleMapper implements Function<Role, RoleDto> {
         return new RoleDto(
                 role.getUuid(),
                 role.getName(),
-                role.getCbo()
+                role.getCbo(),
+                role.getCode()
         );
     }
 }

@@ -108,5 +108,4 @@ public class EmployeeController extends BaseController {
         employeeService.deleteEmployee(uuid);
         return ResponseEntity.noContent().build();
     }
-
 }

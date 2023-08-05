@@ -38,8 +38,8 @@ public class SecurityConfiguration {
                         "/api/auth/login",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
-                        "/extern/**",
-                        "/api/employee")
+                        "/api/external/**",
+                        "/api/role/**")
                         .permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

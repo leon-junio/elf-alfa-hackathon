@@ -13,4 +13,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findByUuid(String uuid);
 
     Optional<List<Employee>> findByCandidate(boolean candidate, Pageable pageable);
+
+    long count();
 }

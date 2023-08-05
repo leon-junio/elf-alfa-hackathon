@@ -36,6 +36,9 @@ public class Role {
     @Column(nullable = false)
     private int cbo;
 
+    @Column(nullable = false)
+    private String code;
+
     @OneToMany(mappedBy = "role")
     private Set<Report> reports;
 

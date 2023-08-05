@@ -68,10 +68,10 @@ public class EmployeeRequest {
     @NotBlank
     private String city;
     @NotBlank
-    @Length(min = 2, max = 2)
+    @Length(min = 2, max = 120)
     private String state;
     @NotBlank
-    @Length(min = 8, max = 8)
+    @Length(min = 8, max = 9)
     private String cep;
     @NotBlank
     private String country;
