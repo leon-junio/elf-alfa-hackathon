@@ -47,6 +47,7 @@ public class EmployeeService {
 
     /**
      * Busca por todos os funcionarios ou candidatos
+     * 
      * @param paginate Pageable paginação
      * @return List of EmployeeDto funcionarios/candidatos
      * @throws ServiceException
@@ -55,7 +56,7 @@ public class EmployeeService {
     public List<EmployeeDto> getEmployees(boolean candidate, @NonNull Pageable paginate) throws ServiceException {
         try {
             var employees = employeeRepository.findByCandidate(candidate, paginate);
-            return employees.stream().map(employeeMapper).toList();
+            return employees.stream().flatMap(List::stream).map(employeeMapper::apply).toList();
         } catch (Exception e) {
             throw new ServiceException("Employee search failed due to a service exception: " + e.getMessage());
         }

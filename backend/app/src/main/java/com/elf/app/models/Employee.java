@@ -118,7 +118,7 @@ public class Employee {
     @Column(nullable = false, length = 11, unique = true)
     private String pis;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Role role;
     @Column(nullable = false)
