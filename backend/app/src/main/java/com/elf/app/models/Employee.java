@@ -75,7 +75,7 @@ public class Employee {
     private int shoeSize;
     @Column(nullable = false)
     private int pantsSize;
-    @Column(nullable = false, length = 2)
+    @Column(nullable = false, length = 12)
     private String shirtSize;
     @Column(nullable = false, length = 16)
     private String phoneNumber1;
@@ -93,7 +93,7 @@ public class Employee {
     private String neighbor;
     @Column(nullable = false, length = 120)
     private String city;
-    @Column(nullable = false, length = 2, columnDefinition = "char(2)")
+    @Column(nullable = false, length = 120)
     private String state;
     @Column(nullable = false, length = 8, columnDefinition = "char(8)")
     @Length(min = 8, max = 8)

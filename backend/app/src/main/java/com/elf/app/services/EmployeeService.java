@@ -107,7 +107,7 @@ public class EmployeeService {
                     .neighbor(request.getNeighbor())
                     .city(request.getCity())
                     .state(request.getState())
-                    .cep(request.getCep())
+                    .cep(request.getCep().replace("-",""))
                     .country(request.getCountry())
                     .publicAreaType(PublicAreaType.getPublicAreaType(request.getPublicAreaType()))
                     .rg(request.getRg())
@@ -186,7 +186,7 @@ public class EmployeeService {
             employee.setNeighbor(request.getNeighbor());
             employee.setCity(request.getCity());
             employee.setState(request.getState());
-            employee.setCep(request.getCep());
+            employee.setCep(request.getCep().replace("-",""));
             employee.setCountry(request.getCountry());
             employee.setPublicAreaType(PublicAreaType.getPublicAreaType(request.getPublicAreaType()));
             employee.setRg(request.getRg());
