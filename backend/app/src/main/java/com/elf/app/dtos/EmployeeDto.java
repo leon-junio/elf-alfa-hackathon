@@ -1,10 +1,7 @@
 package com.elf.app.dtos;
 
 import java.util.Date;
-import java.util.Set;
-
-import com.elf.app.models.Dependent;
-import com.elf.app.models.Role;
+import java.util.List;
 
 import io.micrometer.common.lang.NonNull;
 
@@ -44,7 +41,7 @@ public record EmployeeDto(
         @NonNull Date rgExpeditionDate,
         @NonNull String cpf,
         @NonNull String pis,
-        @NonNull Role role,
+        @NonNull RoleDto role,
         boolean pcd,
         boolean hosted,
         @NonNull String fileRgPath,
@@ -58,5 +55,5 @@ public record EmployeeDto(
         @NonNull String friendCity,
         @NonNull boolean candidate,
         @NonNull int employeeStatus,
-        Set<Dependent> dependents
+        List<DependentDto> dependents
 ) {}

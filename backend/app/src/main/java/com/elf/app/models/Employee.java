@@ -135,11 +135,11 @@ public class Employee {
     private String fileReservistPath;
     @Column(nullable = false)
     private boolean hasFriend;
-     @Column(nullable = false)
+     @Column
     private String friendName;
-     @Column(nullable = false)
+     @Column
     private String friendRole;
-     @Column(nullable = false)
+     @Column
     private String friendCity;
     @Column(nullable = false)
     private boolean candidate;

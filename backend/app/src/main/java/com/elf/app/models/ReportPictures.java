@@ -39,6 +39,9 @@ public class ReportPictures {
     @JoinColumn(name = "report_id", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Report report;
+
+    @Column(nullable = false, length = 105)
+    private String name;
     
     @Lob
     @Column(name = "picture", nullable = false)
