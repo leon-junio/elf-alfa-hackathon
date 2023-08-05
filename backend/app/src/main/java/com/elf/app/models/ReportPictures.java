@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -39,8 +40,9 @@ public class ReportPictures {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Report report;
     
-    @Column(nullable = false)
-    private String picturePath; 
+    @Lob
+    @Column(name = "picture", nullable = false)
+    private byte[] pictureData; 
 
     @PrePersist
     public void prePersist() {
