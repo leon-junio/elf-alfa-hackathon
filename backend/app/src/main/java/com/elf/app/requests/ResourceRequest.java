@@ -22,7 +22,7 @@ public class ResourceRequest {
     private boolean isAvailable;
 
     @NotNull
-    private MultipartFile file; 
+    private MultipartFile filePath; 
 
     
 }

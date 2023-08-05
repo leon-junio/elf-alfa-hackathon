@@ -360,7 +360,4 @@ public class EmployeeService {
         }
     }
 
-    // TODO - Get de apenas candidatos
-    // TODO - Get de apenas funcionarios
-
 }

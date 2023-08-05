@@ -6,4 +6,5 @@ import com.elf.app.models.Role;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
     <Optional>Role findByUuid(String uuid);
+    long count();
 }
