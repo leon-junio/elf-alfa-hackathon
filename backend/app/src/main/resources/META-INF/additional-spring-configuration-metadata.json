@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "elf.jwt-secret-token",
+    "type": "java.lang.String",
+    "description": "The JWT private key used to sign the tokens"
+  },
+  {
+    "name": "elf.default-page-size",
+    "type": "java.lang.String",
+    "description": "The default page size for responses of the API"
+  }
+]}
