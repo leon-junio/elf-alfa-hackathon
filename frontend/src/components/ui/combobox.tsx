@@ -19,7 +19,7 @@ import {
 import { cn } from "@/lib/utils"
 
 interface ComboboxProps {
-    options: {
+    options?: {
         value: any
         label: string
     }[];
@@ -44,7 +44,7 @@ export function Combobox(props: ComboboxProps) {
                     className="w-[200px] justify-between"
                 >
                     {!(value === "" || value === undefined || value === null)
-                        ? options.find((option) => (option.value === value))?.label
+                        ? options?.find((option) => (option.value === value))?.label
                         : "Selecione..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -53,8 +53,8 @@ export function Combobox(props: ComboboxProps) {
                 <Command>
                     <CommandInput placeholder="Pesquisar..." />
                     <CommandEmpty>Nenhuma opção encontrada.</CommandEmpty>
-                    <CommandGroup>
-                        {options.map((option) => (
+                    <CommandGroup className="max-h-[400px] overflow-y-auto">
+                        {options?.map((option) => (
                             <CommandItem
                                 key={option.value}
                                 onSelect={() => {
