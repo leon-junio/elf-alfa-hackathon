@@ -606,6 +606,19 @@ const EmployeeForm = () => {
                 />
                 <FormField
                     control={form.control}
+                    name="rgIssuerCity"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Cidade do órgão emissor</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Digite a cidade do órgão emissor do RG" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
                     name="rgExpeditionDate"
                     render={({ field }) => (
                         <FormItem>

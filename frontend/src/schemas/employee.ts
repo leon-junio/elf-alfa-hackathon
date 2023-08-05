@@ -93,6 +93,7 @@ const employeeSchema = z.object({
     rg: z.string().min(1),
     rgIssuer: z.string().min(1),
     rgIssuerState: z.string().min(1),
+    rgIssuerCity: z.string().min(1),
     rgExpeditionDate: z.date(),
     cpf: z.string().min(1).refine(isCPF, {
         message: 'CPF inválido',
