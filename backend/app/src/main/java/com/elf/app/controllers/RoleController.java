@@ -6,7 +6,6 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elf.app.dtos.RoleDto;
@@ -23,10 +22,7 @@ public class RoleController extends BaseController {
     private final RoleService roleService;
 
     @GetMapping
-    public ResponseEntity<List<RoleDto>> getAllRoles(
-            @RequestParam(required = false) Integer per_page,
-            @RequestParam(required = false) String sort,
-            @RequestParam(required = false) Integer page) throws ServiceException, NotFoundException {
-        return ResponseEntity.ok(roleService.getAll(paginate(page, per_page, sort)));
+    public ResponseEntity<List<RoleDto>> getAllRoles() throws ServiceException, NotFoundException {
+        return ResponseEntity.ok(roleService.getAll());
     }
 }

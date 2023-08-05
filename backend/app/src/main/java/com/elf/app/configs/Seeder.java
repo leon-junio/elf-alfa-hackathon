@@ -44,7 +44,6 @@ public class Seeder {
     }
 
     private void seedUsersTable() {
-        boolean adminCreated = false;
         try {
             var admin = Employee.builder()
                     .name("Administrador")
@@ -93,7 +92,6 @@ public class Seeder {
             var employee = employeeRepository.save(admin);
             authenticationService.signup(employee);
         } catch (Exception e) {
-            adminCreated = false;
             System.err.println(e.getMessage());
         }
     }

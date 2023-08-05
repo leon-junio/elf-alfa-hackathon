@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elf.app.dtos.EmployeeDto;
 import com.elf.app.dtos.ResourceDto;
+import com.elf.app.dtos.RoleDto;
 import com.elf.app.exceptions.InvalidRequestException;
 import com.elf.app.exceptions.ServiceException;
 import com.elf.app.requests.EmployeeRequest;
 import com.elf.app.services.EmployeeService;
 import com.elf.app.services.ResourceService;
+import com.elf.app.services.RoleService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,12 @@ import lombok.RequiredArgsConstructor;
 public class ExternalController extends BaseController {
     private final EmployeeService employeeService;
     private final ResourceService resourceService;
+    private final RoleService roleService;
+
+    @GetMapping("/role")
+    public ResponseEntity<List<RoleDto>> getAllRoles() throws ServiceException, NotFoundException {
+        return ResponseEntity.ok(roleService.getAll());
+    }
 
     @PostMapping("/employee")
     public ResponseEntity<EmployeeDto> createEmployee(@ModelAttribute @Valid EmployeeRequest request)

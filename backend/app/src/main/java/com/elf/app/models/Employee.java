@@ -105,7 +105,7 @@ public class Employee {
     private PublicAreaType publicAreaType;
     @Column(nullable = false, length = 25, unique = true)
     private String rg;
-    @Column(length = 10)
+    @Column(length = 40)
     private String rgIssuer;
     @Column(nullable = false, length = 80)
     private String rgIssuerState;
@@ -121,9 +121,7 @@ public class Employee {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Role role;
-    @Column(nullable = false)
     private boolean pcd;
-    @Column(nullable = false)
     private boolean hosted;
     @Column(nullable = false)
     private String fileRgPath;
@@ -133,15 +131,13 @@ public class Employee {
     private String fileCvPath;
     private String fileCnhPath;
     private String fileReservistPath;
-    @Column(nullable = false)
     private boolean hasFriend;
-     @Column
+    @Column(nullable = true, length = 350)
     private String friendName;
-     @Column
+    @Column(nullable = true, length = 120)
     private String friendRole;
-     @Column
+    @Column(nullable = true, length = 120)
     private String friendCity;
-    @Column(nullable = false)
     private boolean candidate;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

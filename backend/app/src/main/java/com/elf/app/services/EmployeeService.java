@@ -15,11 +15,13 @@ import com.elf.app.models.Employee;
 import com.elf.app.models.Role;
 import com.elf.app.models.mappers.EmployeeMapper;
 import com.elf.app.models.utils.CivilStatus;
+import com.elf.app.models.utils.EmployeeStatus;
 import com.elf.app.models.utils.PublicAreaType;
 import com.elf.app.models.utils.RaceType;
 import com.elf.app.models.utils.SchoolingType;
 import com.elf.app.repositories.DependentRepository;
 import com.elf.app.repositories.EmployeeRepository;
+import com.elf.app.repositories.RoleRepository;
 import com.elf.app.requests.DependentRequest;
 import com.elf.app.requests.EmployeeRequest;
 
@@ -34,6 +36,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final DependentRepository dependentRepository;
+    private final RoleRepository roleRepository;
 
     /**
      * Busca por todos os funcionarios
@@ -79,7 +82,8 @@ public class EmployeeService {
     public EmployeeDto createEmployee(@NonNull EmployeeRequest request)
             throws ServiceException, InvalidRequestException {
         try {
-            Role role = new Role(); // buscar por uuid de role usando seu repository
+            Role role = roleRepository.findByUuid(request.getRole())
+                    .orElseThrow(() -> new InvalidRequestException("Role not found."));
             request.getRole();
             var employee = Employee.builder()
                     .name(request.getName())
@@ -107,7 +111,7 @@ public class EmployeeService {
                     .neighbor(request.getNeighbor())
                     .city(request.getCity())
                     .state(request.getState())
-                    .cep(request.getCep().replace("-",""))
+                    .cep(request.getCep().replace("-", ""))
                     .country(request.getCountry())
                     .publicAreaType(PublicAreaType.getPublicAreaType(request.getPublicAreaType()))
                     .rg(request.getRg())
@@ -124,6 +128,8 @@ public class EmployeeService {
                     .fileCvPath(FileHandler.getFilePath(request.getFileCvPath()))
                     .fileCnhPath(FileHandler.getFilePath(request.getFileCnhPath()))
                     .fileReservistPath(FileHandler.getFilePath(request.getFileReservistPath()))
+                    .employeeStatus(EmployeeStatus.CANDIDATO)
+                    .candidate(true)
                     .build();
             employee = employeeRepository.save(employee);
             FileHandler.saveFile(request.getFileRgPath(), employee.getFileRgPath());
@@ -131,13 +137,16 @@ public class EmployeeService {
             FileHandler.saveFile(request.getFileCvPath(), employee.getFileCvPath());
             FileHandler.saveFile(request.getFileCnhPath(), employee.getFileCnhPath());
             FileHandler.saveFile(request.getFileReservistPath(), employee.getFileReservistPath());
-            for (DependentRequest dependentRequest : request.getDependents()) {
-                var obj = Dependent.builder()
-                        .cpf(dependentRequest.getCpf().replace(".", "").replace("-", ""))
-                        .employee(employee)
-                        .gender(dependentRequest.isGender())
-                        .build();
-                dependentRepository.save(obj);
+            List<DependentRequest> dependents = request.getDependents();
+            if (dependents != null && !dependents.isEmpty()) {
+                for (DependentRequest dependentRequest : dependents) {
+                    var obj = Dependent.builder()
+                            .cpf(dependentRequest.getCpf().replace(".", "").replace("-", ""))
+                            .employee(employee)
+                            .gender(dependentRequest.isGender())
+                            .build();
+                    dependentRepository.save(obj);
+                }
             }
             return employeeMapper.apply(employee);
         } catch (Exception e) {
@@ -159,7 +168,8 @@ public class EmployeeService {
             throws ServiceException, InvalidRequestException {
         var employee = employeeRepository.findByUuid(uuid)
                 .orElseThrow(() -> new InvalidRequestException("Employee not found."));
-        Role role = new Role(); // buscar por uuid de role usando seu repository
+        Role role = roleRepository.findByUuid(request.getRole())
+                .orElseThrow(() -> new InvalidRequestException("Role not found."));
         try {
             employee.setName(request.getName());
             employee.setMotherName(request.getMotherName());
@@ -186,7 +196,7 @@ public class EmployeeService {
             employee.setNeighbor(request.getNeighbor());
             employee.setCity(request.getCity());
             employee.setState(request.getState());
-            employee.setCep(request.getCep().replace("-",""));
+            employee.setCep(request.getCep().replace("-", ""));
             employee.setCountry(request.getCountry());
             employee.setPublicAreaType(PublicAreaType.getPublicAreaType(request.getPublicAreaType()));
             employee.setRg(request.getRg());
@@ -198,6 +208,8 @@ public class EmployeeService {
             employee.setRole(role);
             employee.setPcd(request.isPcd());
             employee.setHosted(request.isHosted());
+            employee.setEmployeeStatus(EmployeeStatus.CANDIDATO);
+            employee.setCandidate(true);
             if (request.getFileRgPath() != null)
                 employee.setFileRgPath(FileHandler.getFilePath(request.getFileRgPath()));
             if (request.getFileCpfPath() != null)
@@ -219,13 +231,16 @@ public class EmployeeService {
                 FileHandler.saveFile(request.getFileCnhPath(), employee.getFileCnhPath());
             if (request.getFileReservistPath() != null)
                 FileHandler.saveFile(request.getFileReservistPath(), employee.getFileReservistPath());
-            for (DependentRequest dependentRequest : request.getDependents()) {
-                var obj = Dependent.builder()
-                        .cpf(dependentRequest.getCpf().replace(".", "").replace("-", ""))
-                        .employee(employee)
-                        .gender(dependentRequest.isGender())
-                        .build();
-                dependentRepository.save(obj);
+            List<DependentRequest> dependents = request.getDependents();
+            if (dependents != null && !dependents.isEmpty()) {
+                for (DependentRequest dependentRequest : dependents) {
+                    var obj = Dependent.builder()
+                            .cpf(dependentRequest.getCpf().replace(".", "").replace("-", ""))
+                            .employee(employee)
+                            .gender(dependentRequest.isGender())
+                            .build();
+                    dependentRepository.save(obj);
+                }
             }
             return employeeMapper.apply(employee);
         } catch (Exception e) {
