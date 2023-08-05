@@ -25,7 +25,7 @@ public class EmployeeRequest {
      @NotBlank
     @Length(min = 3, max = 255)
     private String motherName;
-     @NotBlank
+    @NotBlank
     @Length(min = 3, max = 255)
     private String fatherName;
     private boolean gender;
