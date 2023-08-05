@@ -18,9 +18,9 @@ public EmployeeDto apply(Employee arg0) {
         arg0.getMotherName(),
         arg0.getFatherName(),
         arg0.isGender(),
-        arg0.getCivilStatus(),
-        arg0.getSchoolingType(),
-        arg0.getRaceType(),
+        arg0.getCivilStatus().ordinal(),
+        arg0.getSchoolingType().ordinal(),
+        arg0.getRaceType().ordinal(),
         arg0.getBirthday(),
         arg0.getNacionality(),
         arg0.getCountryBirth(),
@@ -40,7 +40,7 @@ public EmployeeDto apply(Employee arg0) {
         arg0.getState(),
         arg0.getCep(),
         arg0.getCountry(),
-        arg0.getPublicAreaType(),
+        arg0.getPublicAreaType().ordinal(),
         arg0.getRg(),
         arg0.getRgIssuer(),
         arg0.getRgIssuerState(),
@@ -59,7 +59,10 @@ public EmployeeDto apply(Employee arg0) {
         arg0.isHasFriend(),
         arg0.getFriendName(),
         arg0.getFriendRole(),
-        arg0.getFriendCity()
+        arg0.getFriendCity(),
+        arg0.isCandidate(),
+        arg0.getEmployeeStatus().ordinal(),
+        arg0.getDependents()
     );
 }
     

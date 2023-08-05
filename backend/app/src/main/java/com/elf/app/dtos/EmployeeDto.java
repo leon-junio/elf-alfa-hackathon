@@ -1,13 +1,10 @@
 package com.elf.app.dtos;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
+import com.elf.app.models.Dependent;
 import com.elf.app.models.Role;
-import com.elf.app.models.utils.CivilStatus;
-import com.elf.app.models.utils.PublicAreaType;
-import com.elf.app.models.utils.RaceType;
-import com.elf.app.models.utils.SchoolingType;
 
 import io.micrometer.common.lang.NonNull;
 
@@ -17,9 +14,9 @@ public record EmployeeDto(
         @NonNull String motherName,
         @NonNull String fatherName,
         boolean gender,
-        @NonNull CivilStatus civilStatus,
-        @NonNull SchoolingType schoolingType,
-        @NonNull RaceType raceType,
+        @NonNull int civilStatus,
+        @NonNull int schoolingType,
+        @NonNull int raceType,
         @NonNull Date birthday,
         @NonNull String nacionality,
         @NonNull String countryBirth,
@@ -39,7 +36,7 @@ public record EmployeeDto(
         @NonNull String state,
         @NonNull String cep,
         @NonNull String country,
-        @NonNull PublicAreaType publicAreaType,
+        @NonNull int publicAreaType,
         @NonNull String rg,
         String rgIssuer,
         @NonNull String rgIssuerState,
@@ -58,5 +55,8 @@ public record EmployeeDto(
         boolean hasFriend,
         @NonNull String friendName,
         @NonNull String friendRole,
-        @NonNull String friendCity
+        @NonNull String friendCity,
+        @NonNull boolean candidate,
+        @NonNull int employeeStatus,
+        Set<Dependent> dependents
 ) {}

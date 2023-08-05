@@ -5,7 +5,7 @@ public enum PublicAreaType {
     BECO, LARGO, LARGUETA, LOTEAMENTO, PARQUE, PRACA,
     QUADRA, OUTROS;
 
-    public PublicAreaType getPublicAreaType(int id){
+    public static PublicAreaType getPublicAreaType(int id){
         return PublicAreaType.values()[id];
     }
 }

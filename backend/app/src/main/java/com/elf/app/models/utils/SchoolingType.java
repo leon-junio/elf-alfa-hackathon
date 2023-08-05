@@ -5,7 +5,7 @@ public enum SchoolingType {
     SUPERIOR_COMPLETO, POS_GRADUACAO_INCOMPLETO, POS_GRADUACAO_COMPLETO, MESTRADO_INCOMPLETO, MESTRADO_COMPLETO,
     DOUTORADO_INCOMPLETO, DOUTORADO_COMPLETO, POS_DOUTORADO_INCOMPLETO, POS_DOUTORADO_COMPLETO;
 
-    public SchoolingType getSchoolingType(int id){
+    public static SchoolingType getSchoolingType(int id){
         return SchoolingType.values()[id];
     }
 }

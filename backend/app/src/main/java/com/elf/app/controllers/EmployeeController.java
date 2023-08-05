@@ -20,6 +20,7 @@ import com.elf.app.exceptions.ServiceException;
 import com.elf.app.requests.EmployeeRequest;
 import com.elf.app.services.EmployeeService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,37 +30,39 @@ public class EmployeeController extends BaseController {
 
     private final EmployeeService employeeService;
 
-    // @GetMapping("/{uuid}")
-    // public ResponseEntity<EmployeeDto> getEmployeeData(
-    //         @PathVariable(value = "uuid") String uuid) throws ServiceException, InvalidRequestException {
-    //     return ResponseEntity.ok(employeeService.getEmployeeByUuid((uuid)));
-    // }
+    @GetMapping("/{uuid}")
+    public ResponseEntity<EmployeeDto> getEmployeeData(
+            @PathVariable(value = "uuid") String uuid) throws ServiceException, InvalidRequestException {
+        return ResponseEntity.ok(employeeService.getEmployeeByUuid((uuid)));
+    }
 
-    // @GetMapping
-    // public ResponseEntity<List<EmployeeDto>> getAllEmployees(
-    //         @RequestParam(required = false) Integer per_page,
-    //         @RequestParam(required = false) String sort,
-    //         @RequestParam(required = false) Integer page) throws ServiceException, NotFoundException {
-    //     return ResponseEntity.ok(employeeService.getAll(paginate(page, per_page, sort)));
-    // }
+    @GetMapping
+    public ResponseEntity<List<EmployeeDto>> getAllEmployees(
+            @RequestParam(required = false) Integer per_page,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) Integer page) throws ServiceException, NotFoundException {
+        return ResponseEntity.ok(employeeService.getAll(paginate(page, per_page, sort)));
+    }
 
-    // // @PostMapping
-    // // public ResponseEntity<EmployeeDto> createEmployee(@RequestBody @Valid EmployeeRequest request)
-    // //         throws ServiceException, InvalidRequestException {
-    // //      return ResponseEntity.ok(employeeService.createEmployee(request));
-    // // }
+    @PostMapping
+    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody @Valid EmployeeRequest request)
+            throws ServiceException, InvalidRequestException {
+         //return ResponseEntity.ok(employeeService.createEmployee(request));
+         return null;
+    }
 
-    // // @PutMapping("/{uuid}")
-    // // public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody @Valid EmployeeRequest request,
-    // //         @PathVariable(value = "uuid") String uuid) throws ServiceException, InvalidRequestException {
-    // //     return ResponseEntity.ok(employeeService.updateEmployee(request, uuid));
-    // // }
+    @PutMapping("/{uuid}")
+    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody @Valid EmployeeRequest request,
+            @PathVariable(value = "uuid") String uuid) throws ServiceException, InvalidRequestException {
+        //return ResponseEntity.ok(employeeService.updateEmployee(request, uuid));
+        return null;
+    }
 
-    // @DeleteMapping("/{uuid}")
-    // public ResponseEntity<Void> deleteEmployee(@PathVariable(value = "uuid") String uuid)
-    //         throws ServiceException, InvalidRequestException {
-    //     employeeService.deleteEmployee(uuid);
-    //     return ResponseEntity.noContent().build();
-    // }
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable(value = "uuid") String uuid)
+            throws ServiceException, InvalidRequestException {
+        employeeService.deleteEmployee(uuid);
+        return ResponseEntity.noContent().build();
+    }
 
 }

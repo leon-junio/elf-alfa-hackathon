@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Length;
 
 import com.elf.app.models.utils.CivilStatus;
+import com.elf.app.models.utils.EmployeeStatus;
 import com.elf.app.models.utils.PublicAreaType;
 import com.elf.app.models.utils.RaceType;
 import com.elf.app.models.utils.SchoolingType;
@@ -27,10 +28,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -138,13 +141,17 @@ public class Employee {
     private String friendRole;
      @Column(nullable = false)
     private String friendCity;
+    @Column(nullable = false)
+    private boolean candidate;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EmployeeStatus employeeStatus;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Dependent> dependents;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Report> reports;
-
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<TerminationRequest> terminationRequests;

@@ -19,7 +19,7 @@ public enum CivilStatus {
         return this.civilStatus;
     }
 
-    public CivilStatus getCivilStatus(int id){
+    public static CivilStatus getCivilStatus(int id){
         return CivilStatus.values()[id];
     }
 }
