@@ -1,10 +1,10 @@
 package com.elf.app.requests;
 
-import java.io.File;
 import java.sql.Date;
 import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -22,10 +22,10 @@ public class EmployeeRequest {
     @NotBlank
     @Length(min = 3, max = 255)
     private String name;
-     @NotBlank
+    @NotBlank
     @Length(min = 3, max = 255)
     private String motherName;
-     @NotBlank
+    @NotBlank
     @Length(min = 3, max = 255)
     private String fatherName;
     private boolean gender;
@@ -41,13 +41,13 @@ public class EmployeeRequest {
     private String email;
     @NotNull
     private Date birthday;
-     @NotBlank
+    @NotBlank
     private String nationality;
-     @NotBlank
+    @NotBlank
     private String countryBirth;
-     @NotBlank
+    @NotBlank
     private String stateBirth;
-     @NotBlank
+    @NotBlank
     private String cityBirth;
     @Min(1)
     private int shoeSize;
@@ -91,11 +91,11 @@ public class EmployeeRequest {
     private String role;
     private boolean pcd;
     private boolean hosted;
-    private File fileRgPath;
-    private File fileCpfPath;
-    private File fileCvPath;
-    private File fileCnhPath;
-    private File fileReservistPath;
+    private MultipartFile fileRgPath;
+    private MultipartFile fileCpfPath;
+    private MultipartFile fileCvPath;
+    private MultipartFile fileCnhPath;
+    private MultipartFile fileReservistPath;
     private boolean hasFriend;
     private String friendName;
     private String friendRole;

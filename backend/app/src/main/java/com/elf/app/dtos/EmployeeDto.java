@@ -18,7 +18,7 @@ public record EmployeeDto(
         @NonNull int schoolingType,
         @NonNull int raceType,
         @NonNull Date birthday,
-        @NonNull String nacionality,
+        @NonNull String nationality,
         @NonNull String countryBirth,
         @NonNull String stateBirth,
         @NonNull String cityBirth,

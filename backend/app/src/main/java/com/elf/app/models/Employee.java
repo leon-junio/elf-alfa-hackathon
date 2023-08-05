@@ -64,7 +64,7 @@ public class Employee {
     @Column(nullable = false)
     private Date birthday;
     @Column(nullable = false)
-    private String nacionality;
+    private String nationality;
     @Column(nullable = false)
     private String countryBirth;
     @Column(nullable = false)

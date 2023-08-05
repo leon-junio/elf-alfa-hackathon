@@ -22,7 +22,7 @@ public EmployeeDto apply(Employee arg0) {
         arg0.getSchoolingType().ordinal(),
         arg0.getRaceType().ordinal(),
         arg0.getBirthday(),
-        arg0.getNacionality(),
+        arg0.getNationality(),
         arg0.getCountryBirth(),
         arg0.getStateBirth(),
         arg0.getCityBirth(),
