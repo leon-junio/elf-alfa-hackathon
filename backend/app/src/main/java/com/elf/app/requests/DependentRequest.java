@@ -18,11 +18,7 @@ import lombok.NoArgsConstructor;
 
 public class DependentRequest {
     @NotBlank
-    @Length(min = 3, max = 255)
-    private String name;
-
-    @NotBlank
-    @Length(min = 11, max = 11)
+    @Length(min = 11, max = 14)
     private String cpf;
 
     @NotNull

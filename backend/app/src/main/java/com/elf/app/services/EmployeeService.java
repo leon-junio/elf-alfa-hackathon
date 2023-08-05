@@ -10,6 +10,7 @@ import com.elf.app.configs.FileHandler;
 import com.elf.app.dtos.EmployeeDto;
 import com.elf.app.exceptions.InvalidRequestException;
 import com.elf.app.exceptions.ServiceException;
+import com.elf.app.models.Dependent;
 import com.elf.app.models.Employee;
 import com.elf.app.models.Role;
 import com.elf.app.models.mappers.EmployeeMapper;
@@ -17,9 +18,12 @@ import com.elf.app.models.utils.CivilStatus;
 import com.elf.app.models.utils.PublicAreaType;
 import com.elf.app.models.utils.RaceType;
 import com.elf.app.models.utils.SchoolingType;
+import com.elf.app.repositories.DependentRepository;
 import com.elf.app.repositories.EmployeeRepository;
+import com.elf.app.requests.DependentRequest;
 import com.elf.app.requests.EmployeeRequest;
 
+import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +33,7 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final DependentRepository dependentRepository;
 
     /**
      * Busca por todos os funcionarios
@@ -70,6 +75,7 @@ public class EmployeeService {
      * @throws ServiceException
      * @throws InvalidRequestException
      */
+    @Transactional(rollbackOn = Exception.class)
     public EmployeeDto createEmployee(@NonNull EmployeeRequest request)
             throws ServiceException, InvalidRequestException {
         try {
@@ -84,7 +90,7 @@ public class EmployeeService {
                     .schoolingType(SchoolingType.getSchoolingType(request.getSchoolingType()))
                     .raceType(RaceType.getRaceType(request.getRaceType()))
                     .birthday(request.getBirthday())
-                    .cpf(request.getCpf())
+                    .cpf(request.getCpf().replace(".", "").replace("-", ""))
                     .email(request.getEmail())
                     .nationality(request.getNationality())
                     .countryBirth(request.getCountryBirth())
@@ -125,6 +131,14 @@ public class EmployeeService {
             FileHandler.saveFile(request.getFileCvPath(), employee.getFileCvPath());
             FileHandler.saveFile(request.getFileCnhPath(), employee.getFileCnhPath());
             FileHandler.saveFile(request.getFileReservistPath(), employee.getFileReservistPath());
+            for (DependentRequest dependentRequest : request.getDependents()) {
+                var obj = Dependent.builder()
+                        .cpf(dependentRequest.getCpf().replace(".", "").replace("-", ""))
+                        .employee(employee)
+                        .gender(dependentRequest.isGender())
+                        .build();
+                dependentRepository.save(obj);
+            }
             return employeeMapper.apply(employee);
         } catch (Exception e) {
             throw new ServiceException("Employee creation failed due to a service exception: " + e.getMessage());
@@ -140,6 +154,7 @@ public class EmployeeService {
      * @throws ServiceException
      * @throws InvalidRequestException
      */
+    @Transactional(rollbackOn = Exception.class)
     public EmployeeDto updateEmployee(@NonNull EmployeeRequest request, @NonNull String uuid)
             throws ServiceException, InvalidRequestException {
         var employee = employeeRepository.findByUuid(uuid)
@@ -154,7 +169,7 @@ public class EmployeeService {
             employee.setSchoolingType(SchoolingType.getSchoolingType(request.getSchoolingType()));
             employee.setRaceType(RaceType.getRaceType(request.getRaceType()));
             employee.setBirthday(request.getBirthday());
-            employee.setCpf(request.getCpf());
+            employee.setCpf(request.getCpf().replace(".", "").replace("-", ""));
             employee.setEmail(request.getEmail());
             employee.setNationality(request.getNationality());
             employee.setCountryBirth(request.getCountryBirth());
@@ -204,6 +219,14 @@ public class EmployeeService {
                 FileHandler.saveFile(request.getFileCnhPath(), employee.getFileCnhPath());
             if (request.getFileReservistPath() != null)
                 FileHandler.saveFile(request.getFileReservistPath(), employee.getFileReservistPath());
+            for (DependentRequest dependentRequest : request.getDependents()) {
+                var obj = Dependent.builder()
+                        .cpf(dependentRequest.getCpf().replace(".", "").replace("-", ""))
+                        .employee(employee)
+                        .gender(dependentRequest.isGender())
+                        .build();
+                dependentRepository.save(obj);
+            }
             return employeeMapper.apply(employee);
         } catch (Exception e) {
             throw new ServiceException("Employee update failed due to a a service exception: " + e.getMessage());
