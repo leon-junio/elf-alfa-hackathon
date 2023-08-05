@@ -14,7 +14,7 @@ spring:
     # configurações da ORM de acesso aos dados
     jpa:
         hibernate:
-            ddl-auto: create-drop #update quando mais avançado no sistema
+            ddl-auto: none #update quando mais avançado no sistema
         show-sql: true
         open-in-view: true
         properties:

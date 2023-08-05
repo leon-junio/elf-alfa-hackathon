@@ -4,9 +4,6 @@ import java.sql.Date;
 import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UUID;
-
-import com.elf.app.models.Address;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

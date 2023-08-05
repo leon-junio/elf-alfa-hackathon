@@ -26,8 +26,8 @@ public class AuthenticationController {
      * @param request the request with the user data
      * @return AuthenticationResponse with the token
      */
-    @PostMapping("/signin")
-    public ResponseEntity<?> signin(
+    @PostMapping("/login")
+    public ResponseEntity<?> login(
             @RequestBody AuthenticationRequest request) {
         try {
             return ResponseEntity.ok(authenticationService.signin(request));
