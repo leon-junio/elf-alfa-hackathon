@@ -36,7 +36,7 @@ public class EmployeeRequest {
     @Min(0)
     private int raceType;
     @NotBlank
-    @Length(min = 11, max = 11)
+    @Length(min = 11, max = 14)
     private String cpf;
     private String email;
     @NotNull

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 public class DependentRequest {
     @NotBlank
-    @Length(min = 11, max = 11)
+    @Length(min = 11, max = 14)
     private String cpf;
 
     private boolean gender;

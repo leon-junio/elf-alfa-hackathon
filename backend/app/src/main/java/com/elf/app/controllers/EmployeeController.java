@@ -55,6 +55,18 @@ public class EmployeeController extends BaseController {
         return ResponseEntity.ok(employeeService.getEmployees(candidate, paginate(page, per_page, sort)));
     }
 
+    @PostMapping
+    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody @Valid EmployeeRequest request)
+            throws ServiceException, InvalidRequestException {
+        return ResponseEntity.ok(employeeService.createEmployee(request));
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody @Valid EmployeeRequest request,
+            @PathVariable(value = "uuid") String uuid) throws ServiceException, InvalidRequestException {
+        return ResponseEntity.ok(employeeService.updateEmployee(request, uuid));
+    }
+
     @GetMapping("/documents/rg/{uuid}")
     public ResponseEntity<?> getRgDocument(@PathVariable(value = "uuid") String uuid)
             throws ServiceException, InvalidRequestException {
@@ -88,19 +100,6 @@ public class EmployeeController extends BaseController {
             throws ServiceException, InvalidRequestException {
         File document = employeeService.getEmployeeDocumentReservist(uuid);
         return ResponseEntity.ok().contentType(MediaType.valueOf("application/pdf")).body(document);
-    }
-
-    @PostMapping
-    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody @Valid EmployeeRequest request)
-            throws ServiceException, InvalidRequestException {
-        return ResponseEntity.ok(employeeService.createEmployee(request));
-    }
-
-    @PutMapping("/{uuid}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody @Valid EmployeeRequest request,
-            @PathVariable(value = "uuid") String uuid) throws ServiceException, InvalidRequestException {
-        return ResponseEntity.ok(employeeService.updateEmployee(request, uuid));
-
     }
 
     @DeleteMapping("/{uuid}")

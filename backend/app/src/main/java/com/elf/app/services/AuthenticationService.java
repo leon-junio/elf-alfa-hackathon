@@ -25,9 +25,11 @@ public class AuthenticationService {
      * @return AuthenticationResponse with the token
      */
     public AuthenticationResponse signin(AuthenticationRequest request) {
+        System.out.println(request);
+        System.out.println(request.getCpf().replace(".","").replace("-",""));
         authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.getCpf(), request.getPassword()));
-        var user = repository.findByCpf(request.getCpf()).orElseThrow();
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getCpf().replace(".","").replace("-",""), request.getPassword()));
+        var user = repository.findByCpf(request.getCpf().replace(".","").replace("-","")).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
