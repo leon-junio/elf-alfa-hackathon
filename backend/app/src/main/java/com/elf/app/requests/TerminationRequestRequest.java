@@ -1,8 +1,8 @@
 package com.elf.app.requests;
 
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.UUID;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,14 +14,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class DependentRequest {
-    @NotBlank
-    @Length(min = 11, max = 11)
-    private String cpf;
-
-    private boolean gender;
+public class TerminationRequestRequest {
+    private boolean isApproved;
 
     @NotBlank
     @UUID
     private String employee;
+
+    @NotBlank
+    @UUID
+    private String targetEmployee;
+
+    @Min(0)
+    private int terminationType;
 }
