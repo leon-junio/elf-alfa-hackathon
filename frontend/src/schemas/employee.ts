@@ -65,7 +65,7 @@ const employeeSchema = z.object({
     civilStatus: z.nativeEnum(CivilStatus),
     schoolingType: z.nativeEnum(SchoolingType),
     birthday: z.date(),
-    nacionality: z.string().min(1),
+    nationality: z.string().min(1),
     countryBirth: z.string().min(1),
     stateBirth: z.string().min(1),
     cityBirth: z.string().min(1),

@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Trash } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useForm, type Control, type FieldArrayWithId, type UseFieldArrayRemove } from "react-hook-form";
 import { useIMask } from "react-imask";
 import * as z from "zod";
@@ -97,6 +97,11 @@ const DependantForm = (props: { field: FieldArrayWithId<z.infer<typeof formSchem
 const EmployeeForm = () => {
     const [sending, setSending] = useState(false)
 
+    const [countryData, setCountryData] = useState<any>(null)
+    const [stateData, setStateData] = useState<any>(null)
+    const [cityData, setCityData] = useState<any>(null)
+    const [roleData, setRoleData] = useState<any>(null)
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     })
@@ -133,6 +138,11 @@ const EmployeeForm = () => {
     );
 
     const watchHasFriend = form.watch('hasFriend')
+    const watchCountry = form.watch('country')
+    const watchState = form.watch('state')
+
+    const isBrasil = watchCountry === 'Brasil'
+    const isStateSelected = watchState && isBrasil
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setSending(true)
@@ -146,6 +156,7 @@ const EmployeeForm = () => {
                     value.forEach((dependant, index) => {
                         Object.entries(dependant).forEach(([dependantKey, dependantValue]) => {
                             // @ts-ignore
+                            //Alterar para um array de Objetos com os dados dos dependentes
                             formData.append(`dependants[${index}][${dependantKey}]`, dependantValue)
                         })
                     })
@@ -154,12 +165,15 @@ const EmployeeForm = () => {
                     // @ts-ignore
                     formData.append(key, value.file)
                 }
-                else {
+                else if (value instanceof Date) {
+                    // @ts-ignore
+                    formData.append(key, value.toISOString().split('T')[0])
+                } else {
                     // @ts-ignore
                     formData.append(key, value)
                 }
             })
-            
+
             await fetch(`${process.env.API_HOST}/external/employee`, {
                 method: "POST",
                 body: formData,
@@ -170,6 +184,54 @@ const EmployeeForm = () => {
             setSending(false)
         }
     }
+
+    useEffect(() => {
+        const fetchCountry = async () => {
+            const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/paises')
+            const data = await response.json()
+            setCountryData(data)
+        }
+        fetchCountry()
+    }, [])
+
+    useEffect(() => {
+        const fetchRole = async () => {
+            const response = await fetch(`${process.env.API_HOST}/external/role`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await response.json()
+            setRoleData(data)
+        }
+        fetchRole()
+    }, [])
+
+    useEffect(() => {
+        if (!isBrasil) return;
+
+        const fetchState = async () => {
+            const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados`)
+            const data = await response.json()
+            setStateData(data)
+        }
+        if (watchCountry) {
+            fetchState()
+        }
+    }, [watchCountry, isBrasil])
+
+    useEffect(() => {
+        const fetchCity = async () => {
+            const state = stateData?.find((state: any) => state.nome === watchState)
+            if (!state) return
+            const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state.id}/municipios`)
+            const data = await response.json()
+            setCityData(data)
+        }
+        if (watchState) {
+            fetchCity()
+        }
+    }, [watchState, stateData])
 
     return (
         <Form {...form}>
@@ -299,7 +361,7 @@ const EmployeeForm = () => {
                 />
                 <FormField
                     control={form.control}
-                    name="nacionality"
+                    name="nationality"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Nacionalidade</FormLabel>
@@ -433,6 +495,74 @@ const EmployeeForm = () => {
                 />
                 <FormField
                     control={form.control}
+                    name="country"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                            <FormLabel>País</FormLabel>
+                            <FormControl>
+                                <Combobox {...field} options={countryData?.map((country: any) => ({
+                                    label: country.nome,
+                                    value: country.nome
+                                }))}
+                                    onChange={(option) => {
+                                        field.onChange(option?.value)
+                                    }}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                            <FormLabel>Estado</FormLabel>
+                            <FormControl>
+                                {isBrasil ? (
+                                    <Combobox {...field} options={stateData?.map((state: any) => ({
+                                        label: state.nome,
+                                        value: state.nome
+                                    }))}
+                                        onChange={(option) => {
+                                            field.onChange(option?.value)
+                                        }}
+                                    />
+                                ) : (
+                                    <Input placeholder="Digite o estado" {...field} />
+                                )}
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="city"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                            <FormLabel>Cidade</FormLabel>
+                            <FormControl>
+                                {isBrasil && isStateSelected ? (
+                                    <Combobox {...field} options={cityData?.map((city: any) => ({
+                                        label: city.nome,
+                                        value: city.nome
+                                    }))}
+                                        onChange={(option) => {
+                                            field.onChange(option?.value)
+                                        }}
+                                    />
+                                ) : (
+                                    <Input placeholder="Digite a cidade" {...field} />
+                                )}
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
                     name="address"
                     render={({ field }) => (
                         <FormItem>
@@ -485,51 +615,12 @@ const EmployeeForm = () => {
                 />
                 <FormField
                     control={form.control}
-                    name="city"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Cidade</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Digite a cidade" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="state"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Estado</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Digite o estado" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
                     name="cep"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>CEP</FormLabel>
                             <FormControl>
                                 <Input placeholder="Digite o CEP" {...field} ref={cepRef as React.RefObject<HTMLInputElement>} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="country"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>País</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Digite o país" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -660,10 +751,15 @@ const EmployeeForm = () => {
                     control={form.control}
                     name="role"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex flex-col">
                             <FormLabel>Cargo</FormLabel>
                             <FormControl>
-                                <Input placeholder="Digite seu cargo" {...field} />
+                                <Combobox {...field} options={roleData?.map((role: any) => ({
+                                    label: role.name,
+                                    value: role.id,
+                                }))} onChange={(option) => {
+                                    field.onChange(option?.value)
+                                }} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
