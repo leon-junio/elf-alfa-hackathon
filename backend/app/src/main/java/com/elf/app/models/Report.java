@@ -4,7 +4,6 @@ import java.util.Set;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +35,7 @@ public class Report {
     @Column(unique = true, nullable = false, updatable = false)
     private String uuid;
 
+    @Column(nullable = false, length = 350)
     private String name;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -56,8 +56,29 @@ public class Report {
     @OneToMany(mappedBy = "report", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ReportPictures> reportPictures;
 
+    @Column(nullable = false, length = 1000)
     private String ocurrenceDescription;
-    private String location;
+
+    @Column(nullable = false, length = 200)
+    private String address;
+
+    @Column(nullable = false)
+    private String number;
+
+    @Column(length = 60)
+    private String complement;
+
+    @Column(nullable = false)
+    private String neighbor;
+
+    @Column(nullable = false, length = 120)
+    private String city;
+
+    @Column(nullable = false, length = 2, columnDefinition = "char(2)")
+    private String state;
+
+    @Column(nullable = false, length = 100)
+    private String country;
 
     @PrePersist
     public void prePersist() {

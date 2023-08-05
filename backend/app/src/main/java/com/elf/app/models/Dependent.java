@@ -32,8 +32,13 @@ public class Dependent {
     private Long id;
     @Column(unique = true, nullable = false, updatable = false)
     private String uuid;
+    
+    @Column(nullable = false, length = 11, unique = true)
     private String cpf;
+    
+    @Column(nullable = false)
     private boolean gender;
+    
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

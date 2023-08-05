@@ -26,10 +26,17 @@ public class Resource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     @Column(unique = true, nullable = false, updatable = false)
     private String uuid;
+    
+    @Column(nullable = false, length = 350)
     private String description;
+
+    @Column(nullable = false)
     private boolean isAvailable;
+
+    @Column(nullable = false)
     private String filePath;
 
     @OneToMany(mappedBy = "resource")

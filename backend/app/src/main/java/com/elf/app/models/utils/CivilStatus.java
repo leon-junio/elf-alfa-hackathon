@@ -19,7 +19,7 @@ public enum CivilStatus {
         return this.civilStatus;
     }
 
-    public String getCivilStatus(int id){
-        return CivilStatus.values()[id].getCivilStatus();
+    public CivilStatus getCivilStatus(int id){
+        return CivilStatus.values()[id];
     }
 }

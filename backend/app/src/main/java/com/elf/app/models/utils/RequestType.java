@@ -7,7 +7,7 @@ public enum RequestType {
     /**
      * Busca o valor do nome do tipo de solicitação
      */
-    public String getEnumName(int id) {
-        return RequestType.values()[id].name();
+    public RequestType getRequestType(int id){
+        return RequestType.values()[id];
     }
 }
