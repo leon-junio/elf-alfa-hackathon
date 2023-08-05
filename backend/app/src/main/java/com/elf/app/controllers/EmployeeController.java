@@ -1,6 +1,7 @@
 package com.elf.app.controllers;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -16,9 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elf.app.configs.FileHandler;
 import com.elf.app.dtos.EmployeeDto;
 import com.elf.app.exceptions.InvalidRequestException;
 import com.elf.app.exceptions.ServiceException;
+import com.elf.app.models.Employee;
+import com.elf.app.models.utils.CivilStatus;
+import com.elf.app.models.utils.PublicAreaType;
+import com.elf.app.models.utils.RaceType;
+import com.elf.app.models.utils.SchoolingType;
 import com.elf.app.requests.EmployeeRequest;
 import com.elf.app.services.EmployeeService;
 
@@ -109,4 +116,58 @@ public class EmployeeController extends BaseController {
         return ResponseEntity.noContent().build();
     }
 
+    public boolean createAdmin () {
+        boolean adminCreated = true;
+
+        try {
+            var admin = Employee.builder()
+            .name("Administrador")
+            .motherName("Adm")
+            .fatherName("Adm")
+            .gender(false)
+            .civilStatus(CivilStatus.getCivilStatus(0))
+            .schoolingType(SchoolingType.getSchoolingType(0))
+            .raceType(RaceType.getRaceType(0))
+            .birthday(new Date())
+            .cpf("00000000000")
+            .email("admin@gmail.com")
+            .nationality("Brasileiro")
+            .countryBirth("Brasil")
+            .stateBirth("Ad")
+            .cityBirth("Adm")
+            .shoeSize(1)
+            .pantsSize(1)
+            .shirtSize("M")
+            .phoneNumber1("(31) 98765-4321")
+            .phoneNumber2("(31) 91234-5678")
+            .address("Contorno")
+            .number("1000")
+            .complement("Adm")
+            .neighbor("Adm")
+            .city("Adm")
+            .state("Ad")
+            .cep("00000000")
+            .country("Adm")
+            .publicAreaType(PublicAreaType.getPublicAreaType(0))
+            .rg("000000000")
+            .rgIssuer("Adm")
+            .rgIssuerState("Adm")
+            .rgIssuerCity("Adm")
+            .rgExpeditionDate(new Date())
+            .pis("Adm")
+            .role(null)
+            .pcd(false)
+            .hosted(false)
+            .fileRgPath("/docs/Adm.pdf")
+            .fileCpfPath("/docs/Adm.pdf")
+            .fileCvPath("/docs/Adm.pdf")
+            .fileCnhPath("/docs/Adm.pdf")
+            .fileReservistPath("/docs/Adm.pdf")
+            .build();
+        } catch (Exception e) {
+            adminCreated = false;
+        }
+        
+        return adminCreated;
+    }
 }
