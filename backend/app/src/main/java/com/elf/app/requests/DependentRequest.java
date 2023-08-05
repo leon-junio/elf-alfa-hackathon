@@ -1,7 +1,6 @@
 package com.elf.app.requests;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UUID;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -20,8 +19,4 @@ public class DependentRequest {
     private String cpf;
 
     private boolean gender;
-
-    @NotBlank
-    @UUID
-    private String employee;
 }

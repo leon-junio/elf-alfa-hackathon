@@ -3,9 +3,12 @@ package com.elf.app.models;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.elf.app.models.utils.RequestStatusType;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,6 +38,10 @@ public class VacationRequest {
 
     @Column(nullable = false)
     private boolean isApproved;
+
+    @Enumerated
+    @Column(nullable = false)
+    private RequestStatusType requestStatusType;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)

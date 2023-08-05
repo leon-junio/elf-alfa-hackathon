@@ -27,4 +27,7 @@ public class TerminationRequestRequest {
 
     @Min(0)
     private int terminationType;
+
+    @Min(0)
+    private int requestStatusType;
 }

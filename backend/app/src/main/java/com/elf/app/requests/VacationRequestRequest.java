@@ -1,6 +1,8 @@
 package com.elf.app.requests;
 
 import org.hibernate.validator.constraints.UUID;
+
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,4 +20,7 @@ public class VacationRequestRequest {
     @NotBlank
     @UUID
     private String employee;
+
+    @Min(0)
+    private int requestStatusType;
 }

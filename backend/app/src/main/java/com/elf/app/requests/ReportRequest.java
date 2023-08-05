@@ -4,8 +4,10 @@ import java.util.Set;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.UUID;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +32,6 @@ public class ReportRequest {
     @UUID
     private String role;
 
-    @NotBlank
     @UUID
     private String employee;
 
@@ -60,5 +61,6 @@ public class ReportRequest {
     private String country;
 
     @NotEmpty
+    @Size(min = 1, max = 3)
     private Set <ReportPictureRequest> reportPictures;
 }

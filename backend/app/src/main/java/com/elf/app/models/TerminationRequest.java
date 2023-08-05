@@ -3,6 +3,7 @@ package com.elf.app.models;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.elf.app.models.utils.RequestStatusType;
 import com.elf.app.models.utils.TerminationType;
 
 import jakarta.persistence.CascadeType;
@@ -54,6 +55,13 @@ public class TerminationRequest {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TerminationType terminationType;
+
+    @Column(nullable = false)
+    private int rank;
+
+    @Enumerated
+    @Column(nullable = false)
+    private RequestStatusType requestStatusType;
 
     @PrePersist
     public void prePersist() {

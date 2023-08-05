@@ -23,4 +23,6 @@ public class ResourceRequest {
 
     @NotNull
     private MultipartFile file; 
+
+    
 }
