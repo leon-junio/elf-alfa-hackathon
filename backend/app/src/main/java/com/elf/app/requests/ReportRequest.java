@@ -23,7 +23,6 @@ public class ReportRequest {
     @Length(min = 3, max = 255)
     private String name;
 
-
     @NotBlank
     @UUID
     private String resource;

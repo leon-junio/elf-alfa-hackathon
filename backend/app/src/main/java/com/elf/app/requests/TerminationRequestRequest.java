@@ -29,5 +29,8 @@ public class TerminationRequestRequest {
     private int terminationType;
 
     @Min(0)
+    private int rank;
+
+    @Min(0)
     private int requestStatusType;
 }

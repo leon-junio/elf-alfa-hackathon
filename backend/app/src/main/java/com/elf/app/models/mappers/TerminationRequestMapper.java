@@ -12,7 +12,7 @@ public class TerminationRequestMapper implements Function<TerminationRequest, Te
     @Override
     public TerminationRequestDto apply(TerminationRequest arg0) {
         return new TerminationRequestDto(
-                arg0.getId().toString(),
+                arg0.getUuid(),
                 arg0.isApproved(),
                 employeeMapper.apply(arg0.getEmployee()),
                 employeeMapper.apply(arg0.getTargetEmployee()),

@@ -12,7 +12,7 @@ public class VacationRequestMapper implements Function<VacationRequest, Vacation
     @Override
     public VacationRequestDto apply(VacationRequest arg0) {
         return new VacationRequestDto(
-                arg0.getId().toString(),
+                arg0.getUuid(),
                 arg0.isApproved(),
                 arg0.getRequestStatusType().ordinal(),
                 employeeMapper.apply(arg0.getEmployee())

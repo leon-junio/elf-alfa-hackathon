@@ -14,7 +14,7 @@ public class ReportMapper implements Function<Report, ReportDto> {
     @Override
     public ReportDto apply(Report report) {
         return new ReportDto(
-                report.getId().toString(),
+                report.getUuid(),
                 report.getName(),
                 resourceMapper.apply(report.getResource()),
                 roleMapper.apply(report.getRole()),

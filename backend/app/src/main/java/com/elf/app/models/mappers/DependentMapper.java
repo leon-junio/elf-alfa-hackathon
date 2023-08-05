@@ -8,11 +8,14 @@ import com.elf.app.models.Dependent;
 public class DependentMapper implements Function<Dependent, DependentDto> {
 
     @Override
-    public DependentDto apply(Dependent arg0) {
+    public DependentDto apply(Dependent dependet) {
         return new DependentDto(
-                arg0.getUuid(),
-                arg0.getCpf(),
-                arg0.isGender(),
-                arg0.getEmployee().getUuid());
+                dependet.getUuid(),
+                dependet.getName(),
+                dependet.getCpf(),
+                dependet.getBirthday(),
+                dependet.isGender(),
+                dependet.getRelationship(),
+                dependet.getEmployee().getUuid());
     }
 }
