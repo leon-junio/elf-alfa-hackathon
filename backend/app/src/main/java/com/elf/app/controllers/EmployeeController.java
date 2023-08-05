@@ -1,8 +1,10 @@
 package com.elf.app.controllers;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,18 +46,61 @@ public class EmployeeController extends BaseController {
         return ResponseEntity.ok(employeeService.getAll(paginate(page, per_page, sort)));
     }
 
+    @GetMapping("/filter/{candidate}")
+    public ResponseEntity<List<EmployeeDto>> getEmployeesByFilter(
+            @PathVariable(value = "candidate") boolean candidate,
+            @RequestParam(required = false) Integer per_page,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) Integer page) throws ServiceException, NotFoundException {
+        return ResponseEntity.ok(employeeService.getEmployees(candidate, paginate(page, per_page, sort)));
+    }
+
+    @GetMapping("/documents/rg/{uuid}")
+    public ResponseEntity<?> getRgDocument(@PathVariable(value = "uuid") String uuid)
+            throws ServiceException, InvalidRequestException {
+        File document = employeeService.getEmployeeDocumentRg(uuid);
+        return ResponseEntity.ok().contentType(MediaType.valueOf("application/pdf")).body(document);
+    }
+
+    @GetMapping("/documents/cpf/{uuid}")
+    public ResponseEntity<?> getCpfDocument(@PathVariable(value = "uuid") String uuid)
+            throws ServiceException, InvalidRequestException {
+        File document = employeeService.getEmployeeDocumentCpf(uuid);
+        return ResponseEntity.ok().contentType(MediaType.valueOf("application/pdf")).body(document);
+    }
+
+    @GetMapping("/documents/cv/{uuid}")
+    public ResponseEntity<?> getCvsDocument(@PathVariable(value = "uuid") String uuid)
+            throws ServiceException, InvalidRequestException {
+        File document = employeeService.getEmployeeDocumentCv(uuid);
+        return ResponseEntity.ok().contentType(MediaType.valueOf("application/pdf")).body(document);
+    }
+
+    @GetMapping("/documents/cnh/{uuid}")
+    public ResponseEntity<?> getCnhDocument(@PathVariable(value = "uuid") String uuid)
+            throws ServiceException, InvalidRequestException {
+        File document = employeeService.getEmployeeDocumentCnh(uuid);
+        return ResponseEntity.ok().contentType(MediaType.valueOf("application/pdf")).body(document);
+    }
+
+    @GetMapping("/documents/reservist/{uuid}")
+    public ResponseEntity<?> getReservistDocument(@PathVariable(value = "uuid") String uuid)
+            throws ServiceException, InvalidRequestException {
+        File document = employeeService.getEmployeeDocumentReservist(uuid);
+        return ResponseEntity.ok().contentType(MediaType.valueOf("application/pdf")).body(document);
+    }
+
     @PostMapping
     public ResponseEntity<EmployeeDto> createEmployee(@RequestBody @Valid EmployeeRequest request)
             throws ServiceException, InvalidRequestException {
-         //return ResponseEntity.ok(employeeService.createEmployee(request));
-         return null;
+        return ResponseEntity.ok(employeeService.createEmployee(request));
     }
 
     @PutMapping("/{uuid}")
     public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody @Valid EmployeeRequest request,
             @PathVariable(value = "uuid") String uuid) throws ServiceException, InvalidRequestException {
-        //return ResponseEntity.ok(employeeService.updateEmployee(request, uuid));
-        return null;
+        return ResponseEntity.ok(employeeService.updateEmployee(request, uuid));
+
     }
 
     @DeleteMapping("/{uuid}")
