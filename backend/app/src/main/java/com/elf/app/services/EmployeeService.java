@@ -24,6 +24,8 @@ import com.elf.app.repositories.EmployeeRepository;
 import com.elf.app.repositories.RoleRepository;
 import com.elf.app.requests.DependentRequest;
 import com.elf.app.requests.EmployeeRequest;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
@@ -37,6 +39,7 @@ public class EmployeeService {
     private final EmployeeMapper employeeMapper;
     private final DependentRepository dependentRepository;
     private final RoleRepository roleRepository;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Busca por todos os funcionarios
@@ -137,19 +140,25 @@ public class EmployeeService {
             FileHandler.saveFile(request.getFileCvPath(), employee.getFileCvPath());
             FileHandler.saveFile(request.getFileCnhPath(), employee.getFileCnhPath());
             FileHandler.saveFile(request.getFileReservistPath(), employee.getFileReservistPath());
-            List<DependentRequest> dependents = request.getDependents();
-            if (dependents != null && !dependents.isEmpty()) {
-                for (DependentRequest dependentRequest : dependents) {
-                    var obj = Dependent.builder()
-                            .cpf(dependentRequest.getCpf().replace(".", "").replace("-", ""))
-                            .employee(employee)
-                            .gender(dependentRequest.isGender())
-                            .build();
-                    dependentRepository.save(obj);
+            String depJson = request.getDependents();
+            if (depJson != null) {
+                List<DependentRequest> dependents = objectMapper.readValue(depJson,
+                        new TypeReference<List<DependentRequest>>() {
+                        });
+                if (dependents != null && !dependents.isEmpty()) {
+                    for (DependentRequest dependentRequest : dependents) {
+                        var obj = Dependent.builder()
+                                .cpf(dependentRequest.getCpf().replace(".", "").replace("-", ""))
+                                .employee(employee)
+                                .gender(dependentRequest.isGender())
+                                .build();
+                        dependentRepository.save(obj);
+                    }
                 }
             }
             return employeeMapper.apply(employee);
         } catch (Exception e) {
+            System.err.println(e.getMessage());
             throw new ServiceException("Employee creation failed due to a service exception: " + e.getMessage());
         }
     }
@@ -231,19 +240,25 @@ public class EmployeeService {
                 FileHandler.saveFile(request.getFileCnhPath(), employee.getFileCnhPath());
             if (request.getFileReservistPath() != null)
                 FileHandler.saveFile(request.getFileReservistPath(), employee.getFileReservistPath());
-            List<DependentRequest> dependents = request.getDependents();
-            if (dependents != null && !dependents.isEmpty()) {
-                for (DependentRequest dependentRequest : dependents) {
-                    var obj = Dependent.builder()
-                            .cpf(dependentRequest.getCpf().replace(".", "").replace("-", ""))
-                            .employee(employee)
-                            .gender(dependentRequest.isGender())
-                            .build();
-                    dependentRepository.save(obj);
+            String depJson = request.getDependents();
+            if (depJson != null) {
+                List<DependentRequest> dependents = objectMapper.readValue(depJson,
+                        new TypeReference<List<DependentRequest>>() {
+                        });
+                if (dependents != null && !dependents.isEmpty()) {
+                    for (DependentRequest dependentRequest : dependents) {
+                        var obj = Dependent.builder()
+                                .cpf(dependentRequest.getCpf().replace(".", "").replace("-", ""))
+                                .employee(employee)
+                                .gender(dependentRequest.isGender())
+                                .build();
+                        dependentRepository.save(obj);
+                    }
                 }
             }
             return employeeMapper.apply(employee);
         } catch (Exception e) {
+            System.err.println(e.getMessage());
             throw new ServiceException("Employee update failed due to a a service exception: " + e.getMessage());
         }
     }

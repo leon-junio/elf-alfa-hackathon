@@ -44,7 +44,6 @@ public class Dependent {
     @Column(nullable = false)
     private Date birthday;
     
-    @Column(nullable = false)
     private boolean gender;
 
     @Column(nullable = false, length = 350)

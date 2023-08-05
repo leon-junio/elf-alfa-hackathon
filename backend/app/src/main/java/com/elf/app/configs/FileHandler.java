@@ -8,7 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class FileHandler {
 
-    public static final String FILE_PATH = "/docs/";
+    public static final String FILE_PATH = "C:/docs/";
+    public static final String DOCUMENT_TYPE = ".pdf";
 
     /**
      * Get the path to save the file
@@ -20,7 +21,7 @@ public class FileHandler {
         if (file == null) {
             return null;
         }
-        return FILE_PATH + UUID.randomUUID().toString();
+        return FILE_PATH + UUID.randomUUID().toString() + DOCUMENT_TYPE;
     }
 
     /**
@@ -37,6 +38,7 @@ public class FileHandler {
             }
             file.transferTo(new File(path));
         } catch (Exception e) {
+            System.err.println(e.getMessage());
             return false;
         }
         return true;
