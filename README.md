@@ -1,21 +1,19 @@
-# elf-alpha-hackathon repo
+# elf-alfa-hackathon repo
 
-Repositório do projeto para a Alpha Hackathon 2023. Backend e frontend inclusos nesse repositório. Autores: Edmar, Felipe e Leon. Faculdade: PUC Minas Praça da Liberdade.
+Repositório do projeto para a Alfa Hackathon 2023. Backend e frontend inclusos nesse repositório. Autores: Edmar, Felipe e Leon. Faculdade: PUC Minas Praça da Liberdade.
 
-# ELF - Projeto para Alpha Hackathon 2023
+# ELF - Projeto para Alfa Hackathon 2023
 
 ELF contempla o código utilizado no frontend, backend e aplicações de deploy. 
 
 ## Stack utilizada
 
-**Front-end:** Dart, Flutter Framework
+**Front-end:** Typescript, Javascript, Next 13, React
 
 **Back-end:** Java, Spring boot 3.1.2, Spring JWT, Spring Web 6
 
-## Routes
-**Backend API REST:** https://elf.servehttp.com:8030/api-docs
-- Swagger UI: /swagger-docs.html
-- Root: /api/elf
+## Documentação das rotas do backend
+**Documentação API REST:** https://elf.servehttp.com:8030/swagger-docs.html
 
 ## Autores
 
