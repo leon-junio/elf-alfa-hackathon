@@ -3,7 +3,7 @@ import fileSchema from './file'
 
 const resourceSchema = z.object({
     description: z.string(),
-    isAvailable: z.boolean(),
+    isAvailable: z.boolean().optional(),
     filePath: fileSchema
 })
 

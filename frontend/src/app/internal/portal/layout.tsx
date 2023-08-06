@@ -2,7 +2,7 @@
 
 import SignoutButton from '@/components/signout-button';
 import { Button } from '@/components/ui/button';
-import { ClipboardList, Flag, Shapes } from 'lucide-react';
+import { ClipboardList, Flag, Shapes, UserCheck2 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -21,11 +21,16 @@ const Layout = ({
                         <ClipboardList className="w-4 h-4 mr-2" /> Candidatos
                     </Button>
                 </Link>
-                {/* <Link href="/internal/portal/solicitations">
-                    <Button variant={pathname === "/internal/portal/solicitations/" ? "default" : "outline"} className="w-full">
-                        <UserCheck2 className="w-4 h-4 mr-2" /> Solicitações
+                <Link href="/internal/portal/vacation">
+                    <Button variant={pathname === "/internal/portal/vacation" ? "default" : "outline"} className="w-full">
+                        <UserCheck2 className="w-4 h-4 mr-2" /> Solicitação Férias
                     </Button>
-                </Link> */}
+                </Link>
+                <Link href="/internal/portal/termination">
+                    <Button variant={pathname === "/internal/portal/termination" ? "default" : "outline"} className="w-full">
+                        <UserCheck2 className="w-4 h-4 mr-2" /> Solicitação Rescisão
+                    </Button>
+                </Link>
                 <Link href="/internal/portal/reports">
                     <Button variant={pathname === "/internal/portal/reports" ? "default" : "outline"} className="w-full">
                         <Flag className="w-4 h-4 mr-2" /> Relatórios
