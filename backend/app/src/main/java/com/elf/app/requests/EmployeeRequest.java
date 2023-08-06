@@ -1,7 +1,6 @@
 package com.elf.app.requests;
 
 import java.sql.Date;
-import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
@@ -103,5 +102,5 @@ public class EmployeeRequest {
     private boolean candidate;
     @Min(0)
     private int employeeStatus;
-    private List<DependentRequest> dependents;
+    private String dependents;
 }

@@ -32,10 +32,11 @@ public class User implements UserDetails {
     private Integer id;
     private String cpf;
     private String password;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)
     private Employee employee;
     private boolean enabled;
+
     private boolean locked;
 
     /*

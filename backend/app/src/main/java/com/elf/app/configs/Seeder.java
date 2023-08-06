@@ -9,19 +9,20 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.elf.app.models.Employee;
 import com.elf.app.models.Role;
+import com.elf.app.models.User;
 import com.elf.app.models.utils.CivilStatus;
+import com.elf.app.models.utils.EmployeeStatus;
 import com.elf.app.models.utils.PublicAreaType;
 import com.elf.app.models.utils.RaceType;
 import com.elf.app.models.utils.SchoolingType;
 import com.elf.app.repositories.EmployeeRepository;
 import com.elf.app.repositories.RoleRepository;
 import com.elf.app.repositories.UserRepository;
-import com.elf.app.services.AuthenticationService;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,13 +30,15 @@ import lombok.RequiredArgsConstructor;
 public class Seeder {
 
     private final UserRepository userRepository;
-    private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
-    private final AuthenticationService authenticationService;
+    private final UserRepository repository;
+    private final EmployeeRepository employeeRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final java.util.Random random = new java.util.Random();
 
     @EventListener
     public void seed(ContextRefreshedEvent event) {
-        if (!usersExist()) {
+        if (!usersExist() && !employeesExist()) {
             seedUsersTable();
         }
         if (!rolesExist()) {
@@ -88,9 +91,20 @@ public class Seeder {
                     .fileCvPath("/docs/Adm.pdf")
                     .fileCnhPath("/docs/Adm.pdf")
                     .fileReservistPath("/docs/Adm.pdf")
+                    .employeeStatus(EmployeeStatus.CONTRATADO)
+                    .candidate(false)
                     .build();
             var employee = employeeRepository.save(admin);
-            authenticationService.signup(employee);
+            String genPass = "" + employee.getName().length() + random.nextInt(1000);
+            System.out.println("senha: " + genPass);
+            var user = User.builder()
+                    .cpf(employee.getCpf())
+                    .password(passwordEncoder.encode(genPass))
+                    .employee(employeeRepository.findById(employee.getId()).orElseThrow())
+                    .locked(true)
+                    .enabled(true)
+                    .build();
+            repository.save(user);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -121,6 +135,10 @@ public class Seeder {
 
     private boolean usersExist() {
         return userRepository.count() != 0;
+    }
+
+    private boolean employeesExist() {
+        return employeeRepository.count() != 0;
     }
 
     private boolean rolesExist() {
