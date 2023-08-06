@@ -1,5 +1,7 @@
 package com.elf.app.models;
 
+import java.util.Date;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -62,6 +64,10 @@ public class TerminationRequest {
     @Enumerated
     @Column(nullable = false)
     private RequestStatusType requestStatusType;
+
+    @Column(nullable = false)
+    private Date terminationDate;
+
 
     @PrePersist
     public void prePersist() {

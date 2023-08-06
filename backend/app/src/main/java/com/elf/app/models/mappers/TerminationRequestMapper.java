@@ -20,7 +20,8 @@ public class TerminationRequestMapper implements Function<TerminationRequest, Te
                 targetEmployee != null ? employeeMapper.apply(targetEmployee) : null,
                 arg0.getTerminationType().ordinal(),
                 arg0.getRank(),
-                arg0.getRequestStatusType().ordinal()
+                arg0.getRequestStatusType().ordinal(),
+                arg0.getTerminationDate()
         );
     }
 }

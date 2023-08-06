@@ -1,5 +1,7 @@
 package com.elf.app.models;
 
+import java.util.Date;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -47,6 +49,13 @@ public class VacationRequest {
     @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Employee employee;
+
+    @Column(nullable = false)
+    private Date vacationStart;
+
+    @Column(nullable = false)
+    private Date vacationEnd;
+
 
     @PrePersist
     public void prePersist() {
