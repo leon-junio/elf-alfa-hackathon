@@ -17,7 +17,7 @@ ELF contempla o código utilizado no frontend, backend e aplicações de deploy.
 **Back-end:** Java, Spring boot 3.1.2, Spring JWT, Spring Web 6
 
 ## Documentação das rotas do backend
-**Documentação API REST:** https://elf.servehttp.com:8030/swagger-docs.html
+**Documentação API REST:** /swagger-docs.html
 
 ## Autores
 
