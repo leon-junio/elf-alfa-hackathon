@@ -3,6 +3,7 @@
 import type { PermitModel, UserModel } from "@/app/interfaces/request-models";
 import { useRouter } from "next/navigation";
 import { createContext, useEffect, useState } from "react";
+import { useToast } from "./ui/use-toast";
 
 
 export const UserContext = createContext<{
@@ -11,7 +12,8 @@ export const UserContext = createContext<{
     getUser: (token?: string) => Promise<boolean> | void;
     logout: () => Promise<boolean> | void;
     permissions: PermitModel | undefined;
-}>({ user: undefined, getUser: () => { }, logout: () => { }, token: undefined, permissions: undefined });
+    toast: any;
+}>({ user: undefined, getUser: () => { }, logout: () => { }, token: undefined, permissions: undefined, toast: undefined });
 
 export const UserProvider = ({
     children,
@@ -24,6 +26,8 @@ export const UserProvider = ({
     const [token, setToken] = useState<string | undefined>(initialToken)
     const [user, setUser] = useState<UserModel | undefined>(undefined);
     const [permissions, setPermissions] = useState<PermitModel | undefined>(undefined);
+
+    const {toast} = useToast()
 
     const getUser = async (argToken?: string) => {
         if (argToken === token && user) return true
@@ -88,7 +92,7 @@ export const UserProvider = ({
     }, [initialToken, token])
 
     return (
-        <UserContext.Provider value={{ user, token, getUser, logout, permissions }}>
+        <UserContext.Provider value={{ user, token, getUser, logout, permissions, toast }}>
             {children}
         </UserContext.Provider>
     );
