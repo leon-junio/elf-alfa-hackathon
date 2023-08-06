@@ -16,7 +16,9 @@ public class VacationRequestMapper implements Function<VacationRequest, Vacation
                 arg0.getUuid(),
                 arg0.isApproved(),
                 arg0.getRequestStatusType().ordinal(),
-                employee != null ? employeeMapper.apply(employee) : null
+                employee != null ? employeeMapper.apply(employee) : null,
+                arg0.getVacationStart(),
+                arg0.getVacationEnd()
         );
     }
 }

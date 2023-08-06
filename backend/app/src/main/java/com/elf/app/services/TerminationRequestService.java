@@ -22,69 +22,69 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 
 public class TerminationRequestService {
-    private final TerminationRequestRepository vacationRequestRepository;
-    private final TerminationRequestMapper vacationRequestMapper = new TerminationRequestMapper();
+    private final TerminationRequestRepository terminationRequestRepository;
+    private final TerminationRequestMapper terminationRequestMapper = new TerminationRequestMapper();
     private final EmployeeRepository employeeRepository;
 
     /**
-     * Busca por todos os vacationRequests
+     * Busca por todos os terminationRequests
      * 
      * @return List of TerminationRequestDto
      * @throws ServiceException
      */
     public List<TerminationRequestDto> getAll(@NonNull Pageable paginate) throws ServiceException {
         try {
-            var vacationRequests = vacationRequestRepository.findAll(paginate);
-            return vacationRequests.stream().map(vacationRequestMapper).toList();
+            var terminationRequests = terminationRequestRepository.findAll(paginate);
+            return terminationRequests.stream().map(terminationRequestMapper).toList();
         } catch (Exception e) {
-            throw new ServiceException("vacationRequest search failed due to a service exception: " + e.getMessage());
+            throw new ServiceException("terminationRequest search failed due to a service exception: " + e.getMessage());
         }
     }
 
     /**
-     * Deleta um vacationRequest criado
+     * Deleta um terminationRequest criado
      * 
-     * @param uuid String uuid do vacationRequest
+     * @param uuid String uuid do terminationRequest
      * @throws ServiceException
      * @throws InvalidRequestException
      */
     public void delete(@NonNull String uuid) throws ServiceException {
         try {
-            var vacationRequest = vacationRequestRepository.findByUuid(uuid)
+            var terminationRequest = terminationRequestRepository.findByUuid(uuid)
                     .orElseThrow(() -> new InvalidRequestException("TerminationRequest not found."));
-            if (vacationRequest == null) {
-                throw new ServiceException("vacationRequest not found");
+            if (terminationRequest == null) {
+                throw new ServiceException("terminationRequest not found");
             }
-            vacationRequestRepository.delete(vacationRequest);
+            terminationRequestRepository.delete(terminationRequest);
         } catch (Exception e) {
-            throw new ServiceException("vacationRequest deletion failed due to a service exception: " + e.getMessage());
+            throw new ServiceException("terminationRequest deletion failed due to a service exception: " + e.getMessage());
         }
     }
 
     /**
-     * Busca por um vacationRequest criado
+     * Busca por um terminationRequest criado
      * 
-     * @param uuid String uuid do vacationRequest
+     * @param uuid String uuid do terminationRequest
      * @return TerminationRequestDto
      * @throws ServiceException
      */
     public TerminationRequestDto getbyUuid(@NonNull String uuid) throws ServiceException {
         try {
-            var vacationRequest = vacationRequestRepository.findByUuid(uuid)
+            var terminationRequest = terminationRequestRepository.findByUuid(uuid)
                     .orElseThrow(() -> new InvalidRequestException("TerminationRequest not found."));
-            if (vacationRequest == null) {
-                throw new ServiceException("vacationRequest not found");
+            if (terminationRequest == null) {
+                throw new ServiceException("terminationRequest not found");
             }
-            return vacationRequestMapper.apply(vacationRequest);
+            return terminationRequestMapper.apply(terminationRequest);
         } catch (Exception e) {
-            throw new ServiceException("vacationRequest search failed due to a service exception: " + e.getMessage());
+            throw new ServiceException("terminationRequest search failed due to a service exception: " + e.getMessage());
         }
     }
 
     /**
-     * Cria um novo vacationRequest
+     * Cria um novo terminationRequest
      * 
-     * @param vacationRequestDto TerminationRequestDto
+     * @param terminationRequestDto TerminationRequestDto
      * @return TerminationRequestDto
      * @throws ServiceException
      */
@@ -93,23 +93,24 @@ public class TerminationRequestService {
         try {
             Employee employee = employeeRepository.findByUuid(request.getEmployee())
                 .orElseThrow(() -> new InvalidRequestException("Employee not found."));
-            var vacationRequest = TerminationRequest.builder()
+            var terminationRequest = TerminationRequest.builder()
                     .isApproved(request.isApproved())
                     .requestStatusType(RequestStatusType.getRequestStatusType(request.getRequestStatusType()))
                     .employee(employee)
+                    .terminationDate(request.getTerminationDate())
                     .build();
-            vacationRequestRepository.save(vacationRequest);
-            return vacationRequestMapper.apply(vacationRequest);
+            terminationRequestRepository.save(terminationRequest);
+            return terminationRequestMapper.apply(terminationRequest);
         } catch (Exception e) {
-            throw new ServiceException("vacationRequest creation failed due to a service exception: " + e.getMessage());
+            throw new ServiceException("terminationRequest creation failed due to a service exception: " + e.getMessage());
         }
     }
 
      /**
-     * Atualiza um vacationRequest criado
+     * Atualiza um terminationRequest criado
      * 
-     * @param uuid        String uuid do vacationRequest
-     * @param vacationRequestDto TerminationRequestDto
+     * @param uuid        String uuid do terminationRequest
+     * @param terminationRequestDto TerminationRequestDto
      * @return TerminationRequestDto
      * @throws ServiceException
      * @throws InvalidRequestException
@@ -120,20 +121,22 @@ public class TerminationRequestService {
                 Employee employee = employeeRepository.findByUuid(request.getEmployee())
                     .orElseThrow(() -> new InvalidRequestException("Employee not found."));
 
-                var vacationRequest = vacationRequestRepository.findByUuid(uuid)
+                var terminationRequest = terminationRequestRepository.findByUuid(uuid)
                         .orElseThrow(() -> new InvalidRequestException("TerminationRequest not found."));
-            if (vacationRequest == null) {
-                throw new ServiceException("vacationRequest not found");
+            if (terminationRequest == null) {
+                throw new ServiceException("terminationRequest not found");
             }
 
-            vacationRequest.setApproved(request.isApproved());
-            vacationRequest.setRequestStatusType(RequestStatusType.getRequestStatusType(request.getRequestStatusType()));
-            vacationRequest.setEmployee(employee);
-            vacationRequestRepository.save(vacationRequest);
+            terminationRequest.setApproved(request.isApproved());
+            terminationRequest.setRequestStatusType(RequestStatusType.getRequestStatusType(request.getRequestStatusType()));
+            terminationRequest.setEmployee(employee);
+            terminationRequest.setTerminationDate(request.getTerminationDate());
 
-            return vacationRequestMapper.apply(vacationRequest);
+            terminationRequestRepository.save(terminationRequest);
+
+            return terminationRequestMapper.apply(terminationRequest);
         } catch (Exception e) {
-            throw new ServiceException("vacationRequest update failed due to a service exception: " + e.getMessage());
+            throw new ServiceException("terminationRequest update failed due to a service exception: " + e.getMessage());
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.elf.app.dtos;
 
+import java.util.Date;
+
 import jakarta.validation.constraints.Min;
 import lombok.NonNull;
 
@@ -13,5 +15,7 @@ public record TerminationRequestDto(
         @Min(0)
         int rank,
         @Min(0)
-        int requestStatusType
+        int requestStatusType,
+        @NonNull Date terminationDate
+
 ) {}
