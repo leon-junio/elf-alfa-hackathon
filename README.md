@@ -2,6 +2,10 @@
 
 Repositório do projeto para a Alfa Hackathon 2023. Backend e frontend inclusos nesse repositório. Autores: Edmar, Felipe e Leon. Faculdade: PUC Minas Praça da Liberdade.
 
+- Leon Junio: Backend, banco de dados e ambiente
+- Edmar: Frontend e UX
+- Felipe: Backend, Lider de projeto e suporte
+
 # ELF - Projeto para Alfa Hackathon 2023
 
 ELF contempla o código utilizado no frontend, backend e aplicações de deploy. 
@@ -13,7 +17,7 @@ ELF contempla o código utilizado no frontend, backend e aplicações de deploy.
 **Back-end:** Java, Spring boot 3.1.2, Spring JWT, Spring Web 6
 
 ## Documentação das rotas do backend
-**Documentação API REST:** https://elf.servehttp.com:8030/swagger-docs.html
+**Documentação API REST:** /swagger-docs.html
 
 ## Autores
 

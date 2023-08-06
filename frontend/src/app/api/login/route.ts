@@ -21,11 +21,11 @@ export async function POST(request: Request) {
       return NextResponse.error()
     }
 
-    const response = NextResponse.json({ success: true }, { status: 200 })
+    const response = NextResponse.json({ success: true, token: `Bearer ${parsedData.token}` }, { status: 200 })
 
-    response.cookies.set("token", parsedData.token, {
+    response.cookies.set("token", `Bearer ${parsedData.token}`, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "strict",
       path: "/",
     })
