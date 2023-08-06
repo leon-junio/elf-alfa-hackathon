@@ -13,20 +13,18 @@ public class ReportMapper implements Function<Report, ReportDto> {
 
     @Override
     public ReportDto apply(Report report) {
+        var resource = report.getResource();
+        var role = report.getRole();
+        var employee = report.getEmployee();
         return new ReportDto(
                 report.getUuid(),
                 report.getName(),
-                resourceMapper.apply(report.getResource()),
-                roleMapper.apply(report.getRole()),
-                employeeMapper.apply(report.getEmployee()),
+                resource != null ? resourceMapper.apply(resource) : null,
+                role != null ? roleMapper.apply(role) : null,
+                employee != null ? employeeMapper.apply(employee) : null,
                 report.getOcurrenceDescription(),
-                report.getAddress(),
-                report.getNumber(),
-                report.getComplement(),
-                report.getNeighbor(),
-                report.getCity(),
-                report.getState(),
-                report.getCountry()
+                report.getLatitude(),
+                report.getLongitude()
         );
     }
 }

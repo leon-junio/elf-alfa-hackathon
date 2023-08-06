@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elf.app.dtos.EmployeeDto;
+import com.elf.app.dtos.ReportDto;
 import com.elf.app.dtos.ResourceDto;
 import com.elf.app.dtos.RoleDto;
 import com.elf.app.exceptions.InvalidRequestException;
 import com.elf.app.exceptions.ServiceException;
 import com.elf.app.requests.EmployeeRequest;
+import com.elf.app.requests.ReportRequest;
 import com.elf.app.services.EmployeeService;
+import com.elf.app.services.ReportService;
 import com.elf.app.services.ResourceService;
 import com.elf.app.services.RoleService;
 
@@ -35,6 +38,7 @@ public class ExternalController extends BaseController {
     private final EmployeeService employeeService;
     private final ResourceService resourceService;
     private final RoleService roleService;
+    private final ReportService reportService;
 
     @GetMapping("/role")
     public ResponseEntity<List<RoleDto>> getAllRoles() throws ServiceException, NotFoundException {
@@ -44,7 +48,7 @@ public class ExternalController extends BaseController {
     @PostMapping("/employee")
     public ResponseEntity<EmployeeDto> createEmployee(@ModelAttribute @Valid EmployeeRequest request)
             throws ServiceException, InvalidRequestException {
-                System.out.println(request);
+        System.out.println(request);
         return ResponseEntity.ok(employeeService.createEmployee(request));
     }
 
@@ -67,5 +71,11 @@ public class ExternalController extends BaseController {
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer page) throws ServiceException, NotFoundException {
         return ResponseEntity.ok(resourceService.getAll(paginate(page, per_page, sort)));
+    }
+
+    @PostMapping("/report")
+    public ResponseEntity<ReportDto> createReport(@ModelAttribute @Valid ReportRequest request)
+            throws ServiceException, InvalidRequestException {
+        return ResponseEntity.ok(reportService.create(request));
     }
 }

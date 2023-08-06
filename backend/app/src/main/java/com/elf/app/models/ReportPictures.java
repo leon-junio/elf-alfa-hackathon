@@ -42,6 +42,9 @@ public class ReportPictures {
 
     @Column(nullable = false, length = 105)
     private String name;
+
+    @Column(nullable = false)
+    private String type;
     
     @Lob
     @Column(name = "picture", nullable = false)
