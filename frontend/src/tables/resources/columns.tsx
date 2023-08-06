@@ -14,7 +14,13 @@ export const columns: ColumnDef<Resource>[] = [
   {
     accessorKey: "isAvailable",
     header: "Autorizado",
-    
+    // cell: ({ row,  }) => {
+    //   const value = row.original.isAvailable
+
+    //   return (
+        
+    //   )
+    // }
   },
   {
     accessorKey: "filePath",

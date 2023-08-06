@@ -44,7 +44,7 @@ const LoginForm = () => {
       toast({
         title: "Login efetuado com sucesso",
       })
-      router.push("/internal/candidates")
+      router.push("/internal/portal/candidates")
     } catch (error) {
       console.log(error)
       toast({

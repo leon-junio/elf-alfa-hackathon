@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
             headers: headers
         })
     } else if (pathname.startsWith("/internal") && pathname.startsWith("/internal/login") && request.cookies.get('token')) {
-        return NextResponse.redirect(new URL("/internal/candidates", request.url), {
+        return NextResponse.redirect(new URL("/internal/portal/candidates", request.url), {
             headers: headers
         })
     }
