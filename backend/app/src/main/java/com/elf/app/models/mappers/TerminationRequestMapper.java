@@ -11,11 +11,13 @@ public class TerminationRequestMapper implements Function<TerminationRequest, Te
 
     @Override
     public TerminationRequestDto apply(TerminationRequest arg0) {
+        var employee = arg0.getEmployee();
+        var targetEmployee = arg0.getTargetEmployee();
         return new TerminationRequestDto(
                 arg0.getUuid(),
                 arg0.isApproved(),
-                employeeMapper.apply(arg0.getEmployee()),
-                employeeMapper.apply(arg0.getTargetEmployee()),
+                employee != null ? employeeMapper.apply(employee) : null,
+                targetEmployee != null ? employeeMapper.apply(targetEmployee) : null,
                 arg0.getTerminationType().ordinal(),
                 arg0.getRank(),
                 arg0.getRequestStatusType().ordinal()

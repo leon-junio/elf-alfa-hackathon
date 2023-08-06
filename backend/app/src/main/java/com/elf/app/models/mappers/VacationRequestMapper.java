@@ -11,11 +11,12 @@ public class VacationRequestMapper implements Function<VacationRequest, Vacation
 
     @Override
     public VacationRequestDto apply(VacationRequest arg0) {
+        var employee = arg0.getEmployee();
         return new VacationRequestDto(
                 arg0.getUuid(),
                 arg0.isApproved(),
                 arg0.getRequestStatusType().ordinal(),
-                employeeMapper.apply(arg0.getEmployee())
+                employee != null ? employeeMapper.apply(employee) : null
         );
     }
 }

@@ -9,11 +9,6 @@ public record ReportDto(
         @NonNull RoleDto role,
         EmployeeDto employee,
         @NonNull String ocurrenceDescription,
-        @NonNull String address,
-        @NonNull String number,
-        String complement,
-        @NonNull String neighbor,
-        @NonNull String city,
-        @NonNull String state,
-        @NonNull String country
+        @NonNull String latitude,
+        @NonNull String longitude
 ) {}

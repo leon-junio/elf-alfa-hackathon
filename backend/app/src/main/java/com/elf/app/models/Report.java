@@ -59,26 +59,11 @@ public class Report {
     @Column(nullable = false, length = 1000)
     private String ocurrenceDescription;
 
-    @Column(nullable = false, length = 200)
-    private String address;
-
-    @Column(nullable = false)
-    private String number;
-
-    @Column(length = 60)
-    private String complement;
-
-    @Column(nullable = false)
-    private String neighbor;
-
-    @Column(nullable = false, length = 120)
-    private String city;
-
-    @Column(nullable = false, length = 2, columnDefinition = "char(2)")
-    private String state;
+    @Column(nullable = false, length = 100)
+    private String latitude;
 
     @Column(nullable = false, length = 100)
-    private String country;
+    private String longitude;
 
     @PrePersist
     public void prePersist() {

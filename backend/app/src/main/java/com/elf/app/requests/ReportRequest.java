@@ -1,9 +1,10 @@
 package com.elf.app.requests;
 
-import java.util.Set;
+import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.UUID;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -39,27 +40,12 @@ public class ReportRequest {
     private String ocurrenceDescription;
 
     @NotBlank
-    private String address;
+    private String latitude;
 
     @NotBlank
-    private String number;
-
-    @NotBlank
-    private String complement;
-
-    @NotBlank
-    private String neighbor;
-
-    @NotBlank
-    private String city;
-
-    @NotBlank
-    private String state;
-
-    @NotBlank
-    private String country;
+    private String longitude;
 
     @NotEmpty
-    @Size(min = 1, max = 3)
-    private Set <ReportPictureRequest> reportPictures;
+    @Size(min = 1, max = 6)
+    private List<MultipartFile> pictures;
 }
