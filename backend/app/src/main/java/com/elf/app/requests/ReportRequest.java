@@ -32,7 +32,6 @@ public class ReportRequest {
     @UUID
     private String role;
 
-    @UUID
     private String employee;
 
     @NotBlank

@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfiguration {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final CorsFilter corsFilter;
     private final AuthenticationProvider authenticationProvider;
 
     /**
@@ -39,11 +40,13 @@ public class SecurityConfiguration {
                         "/swagger-ui/**",
                         "/swagger-ui.html",
                         "/api/external/**",
-                        "/api/role/**")
+                        "/api/role/**",
+                        "/api/resource/**")
                         .permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
+                .addFilterAfter(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore((Filter) jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

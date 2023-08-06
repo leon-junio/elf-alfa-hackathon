@@ -86,7 +86,7 @@ public class ReportService {
         try {
             Employee employee = null;
             if (reportRequest.getEmployee() != null) {
-                employee = employeeRepository.findByUuid(reportRequest.getEmployee())
+                employee = employeeRepository.findByCpf(reportRequest.getEmployee())
                         .orElseThrow(() -> new ServiceException("Employee not found"));
             }
             Role role = roleRepository.findByUuid(reportRequest.getRole())
@@ -136,7 +136,7 @@ public class ReportService {
             var report = reportRepository.findByUuid(uuid).orElseThrow(() -> new ServiceException("Report not found"));
             Employee employee = null;
             if (reportRequest.getEmployee() != null) {
-                employee = employeeRepository.findByUuid(reportRequest.getEmployee())
+                employee = employeeRepository.findByCpf(reportRequest.getEmployee())
                         .orElseThrow(() -> new ServiceException("Employee not found"));
             }
             Role role = roleRepository.findByUuid(reportRequest.getRole())
@@ -187,18 +187,12 @@ public class ReportService {
     }
 
     @GetMapping("/{uuid}/pictures")
-    public List<byte[]> getPictures(@NonNull String uuid) throws ServiceException {
+    public List<ReportPictures> getPictures(@NonNull String uuid) throws ServiceException {
         try {
             var report = reportRepository.findByUuid(uuid).orElseThrow(() -> new ServiceException("Report not found"));
-            var pictures = reportPictureRepository.findByReportId(report.getId());
-            List<byte[]> list = null;
-            if (pictures.isPresent()) {
-                list = pictures.get().stream()
-                        .map((ReportPictures reportPictures) -> ImageCompressor
-                                .decompressImage(reportPictures.getPictureData()))
-                        .toList();
-            }
-            return list;
+            var pictures = reportPictureRepository.findByReportId(report.getId())
+                    .orElseThrow(() -> new ServiceException("Report pictures not found"));
+            return pictures;
         } catch (Exception e) {
             throw new ServiceException("Report search failed due to a service exception: " + e.getMessage());
         }

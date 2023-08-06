@@ -48,7 +48,6 @@ public class ExternalController extends BaseController {
     @PostMapping("/employee")
     public ResponseEntity<EmployeeDto> createEmployee(@ModelAttribute @Valid EmployeeRequest request)
             throws ServiceException, InvalidRequestException {
-        System.out.println(request);
         return ResponseEntity.ok(employeeService.createEmployee(request));
     }
 
@@ -65,12 +64,18 @@ public class ExternalController extends BaseController {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(document);
     }
 
-    @GetMapping("/resource/")
+    @GetMapping("/resource")
     public ResponseEntity<List<ResourceDto>> getAllResources(
             @RequestParam(required = false) Integer per_page,
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer page) throws ServiceException, NotFoundException {
         return ResponseEntity.ok(resourceService.getAll(paginate(page, per_page, sort)));
+    }
+
+    @GetMapping("resource/{uuid}")
+    public ResponseEntity<ResourceDto> getResourceData(
+            @PathVariable(value = "uuid") String uuid) throws ServiceException, InvalidRequestException {
+        return ResponseEntity.ok(resourceService.getbyUuid(uuid));
     }
 
     @PostMapping("/report")

@@ -3,6 +3,7 @@ package com.elf.app.controllers;
 import java.util.List;
 
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elf.app.dtos.ReportDto;
 import com.elf.app.exceptions.InvalidRequestException;
 import com.elf.app.exceptions.ServiceException;
+import com.elf.app.models.ReportPictures;
+import com.elf.app.models.utils.ImageCompressor;
 import com.elf.app.requests.ReportRequest;
 import com.elf.app.services.ReportService;
 
@@ -58,7 +61,13 @@ public class ReportController extends BaseController {
     @GetMapping("/pictures/{uuid}")
     public ResponseEntity<List<byte[]>> getReportPicture(@PathVariable(value = "uuid") String uuid)
             throws ServiceException, InvalidRequestException {
-        return ResponseEntity.ok(reportService.getPictures(uuid));
+        List<byte[]> list = null;
+        var pictures = reportService.getPictures(uuid);
+        list = pictures.stream()
+                .map((ReportPictures reportPictures) -> ImageCompressor
+                        .decompressImage(reportPictures.getPictureData()))
+                .toList();
+        return ResponseEntity.ok().contentType(MediaType.valueOf("image/" + pictures.get(0).getType().replace(".", ""))).body(list);
     }
 
     @DeleteMapping("/{uuid}")
