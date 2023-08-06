@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { Combobox } from "@/components/ui/combobox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast, useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 import { useIMask } from "react-imask";
 import * as z from "zod";
 import formSchema from "../schemas/reports";
-import { Combobox } from "@/components/ui/combobox";
 
 const ReportsForm = () => {
     const [sending, setSending] = useState(false)
@@ -18,8 +17,6 @@ const ReportsForm = () => {
     const [roleData, setRoleData] = useState<any>(null)
     const [employeeData, setEmployeeData] = useState<any>(null)
     const [coordenatesData, setCountryData] = useState<any>(null)
-
-
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
