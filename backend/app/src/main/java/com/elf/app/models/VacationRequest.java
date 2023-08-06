@@ -50,10 +50,8 @@ public class VacationRequest {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Employee employee;
 
-    @Column(nullable = false)
     private Date vacationStart;
 
-    @Column(nullable = false)
     private Date vacationEnd;
 
 

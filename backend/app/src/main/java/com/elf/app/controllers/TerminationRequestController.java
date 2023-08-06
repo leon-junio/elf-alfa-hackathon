@@ -43,13 +43,13 @@ public class TerminationRequestController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<TerminationRequestDto> createTerminationRequest(@RequestBody @Valid TerminationRequestRequest request)
+    public ResponseEntity<TerminationRequestDto> createTerminationRequest(@Valid TerminationRequestRequest request)
             throws ServiceException, InvalidRequestException {
         return ResponseEntity.ok(terminationRequestService.create(request));
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<TerminationRequestDto> updateTerminationRequest(@RequestBody @Valid TerminationRequestRequest request,
+    public ResponseEntity<TerminationRequestDto> updateTerminationRequest(@Valid TerminationRequestRequest request,
             @PathVariable(value = "uuid") String uuid) throws ServiceException, InvalidRequestException {
         return ResponseEntity.ok(terminationRequestService.update(uuid, request));
     }

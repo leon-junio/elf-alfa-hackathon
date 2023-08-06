@@ -43,13 +43,13 @@ public class VacationRequestController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<VacationRequestDto> createVacationRequest(@RequestBody @Valid VacationRequestRequest request)
+    public ResponseEntity<VacationRequestDto> createVacationRequest(@Valid VacationRequestRequest request)
             throws ServiceException, InvalidRequestException {
         return ResponseEntity.ok(vacationRequestService.create(request));
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<VacationRequestDto> updateVacationRequest(@RequestBody @Valid VacationRequestRequest request,
+    public ResponseEntity<VacationRequestDto> updateVacationRequest(@Valid VacationRequestRequest request,
             @PathVariable(value = "uuid") String uuid) throws ServiceException, InvalidRequestException {
         return ResponseEntity.ok(vacationRequestService.update(uuid, request));
     }

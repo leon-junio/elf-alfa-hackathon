@@ -42,7 +42,6 @@ public static void manipulatePdf(String src, String dest) throws IOException, Do
             continue;
         stream = (PRStream)object;
         PdfObject pdfsubtype = stream.get(PdfName.SUBTYPE);
-        System.out.println(stream.type());
         if (pdfsubtype != null && pdfsubtype.toString().equals(PdfName.IMAGE.toString())) {
             PdfImageObject image = new PdfImageObject(stream);
             BufferedImage bi = image.getBufferedImage();

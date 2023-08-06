@@ -65,7 +65,6 @@ public class TerminationRequest {
     @Column(nullable = false)
     private RequestStatusType requestStatusType;
 
-    @Column(nullable = false)
     private Date terminationDate;
 
 

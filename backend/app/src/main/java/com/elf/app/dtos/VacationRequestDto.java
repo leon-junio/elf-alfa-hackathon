@@ -9,6 +9,6 @@ public record VacationRequestDto(
         boolean isApproved,
         int requestStatusType,
         EmployeeDto employee,
-        @NonNull Date vacationStart,
-        @NonNull Date vacationEnd
+        Date vacationStart,
+        Date vacationEnd
 ) {}

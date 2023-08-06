@@ -1,6 +1,6 @@
 package com.elf.app.requests;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.UUID;

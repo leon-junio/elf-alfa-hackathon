@@ -43,7 +43,7 @@ public class FileHandler {
             filer = new File(FILE_FOLDER + path);
             file.transferTo(filer);
             try{
-            PdfCompressor.manipulatePdf(new File(FILE_FOLDER + path).getAbsolutePath(),FILE_FOLDER + path);
+            PdfCompressor.manipulatePdf(new File(FILE_FOLDER + path).getAbsolutePath(),FILE_FOLDER + "temp" + path);
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }

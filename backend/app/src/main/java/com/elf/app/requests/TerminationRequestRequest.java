@@ -1,6 +1,6 @@
 package com.elf.app.requests;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.hibernate.validator.constraints.UUID;
 
@@ -19,24 +19,10 @@ import lombok.NoArgsConstructor;
 
 public class TerminationRequestRequest {
     private boolean isApproved;
-
-    @NotBlank
-    @UUID
     private String employee;
-
-    @NotBlank
-    @UUID
     private String targetEmployee;
-
-    @Min(0)
     private int terminationType;
-
-    @Min(0)
     private int rank;
-
-    @Min(0)
     private int requestStatusType;
-
-    @NotNull
     private Date terminationDate;
 }

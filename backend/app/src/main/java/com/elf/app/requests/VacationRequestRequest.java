@@ -1,6 +1,6 @@
 package com.elf.app.requests;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.hibernate.validator.constraints.UUID;
 
@@ -19,17 +19,8 @@ import lombok.NoArgsConstructor;
 
 public class VacationRequestRequest {
     private boolean isApproved;
-
-    @NotBlank
-    @UUID
     private String employee;
-
-    @Min(0)
     private int requestStatusType;
-
-    @NotNull
     private Date vacationStart;
-
-    @NotNull
     private Date vacationEnd;
 }

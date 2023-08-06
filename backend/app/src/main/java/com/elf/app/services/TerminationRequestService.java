@@ -89,11 +89,12 @@ public class TerminationRequestService {
      * @throws ServiceException
      */
     @Transactional(rollbackOn = Exception.class)
-    public TerminationRequestDto create(@Valid @NonNull TerminationRequestRequest request) throws ServiceException {
+    public TerminationRequestDto create(@NonNull TerminationRequestRequest request) throws ServiceException {
         try {
-            Employee employee = employeeRepository.findByUuid(request.getEmployee())
-                .orElseThrow(() -> new InvalidRequestException("Employee not found."));
-            var terminationRequest = TerminationRequest.builder()
+            System.out.println(request.getEmployee());
+            Employee employee = employeeRepository.findById(30l)
+                    .orElseThrow(() -> new InvalidRequestException("Employee not found."));
+var terminationRequest = TerminationRequest.builder()
                     .isApproved(request.isApproved())
                     .requestStatusType(RequestStatusType.getRequestStatusType(request.getRequestStatusType()))
                     .employee(employee)
@@ -116,9 +117,9 @@ public class TerminationRequestService {
      * @throws InvalidRequestException
      */
     @Transactional(rollbackOn = Exception.class)
-    public TerminationRequestDto update(@NonNull String uuid, @Valid @NonNull TerminationRequestRequest request) throws ServiceException {
+    public TerminationRequestDto update(@NonNull String uuid, @NonNull TerminationRequestRequest request) throws ServiceException {
         try {
-                Employee employee = employeeRepository.findByUuid(request.getEmployee())
+                Employee employee = employeeRepository.findById(30l)
                     .orElseThrow(() -> new InvalidRequestException("Employee not found."));
 
                 var terminationRequest = terminationRequestRepository.findByUuid(uuid)

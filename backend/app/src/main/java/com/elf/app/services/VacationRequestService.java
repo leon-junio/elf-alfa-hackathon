@@ -70,7 +70,7 @@ public class VacationRequestService {
      */
     public VacationRequestDto getbyUuid(@NonNull String uuid) throws ServiceException {
         try {
-            var vacationRequest = vacationRequestRepository.findByUuid(uuid)
+            var vacationRequest = vacationRequestRepository.findById(30l)
                     .orElseThrow(() -> new InvalidRequestException("VacationRequest not found."));
             if (vacationRequest == null) {
                 throw new ServiceException("vacationRequest not found");
@@ -89,11 +89,11 @@ public class VacationRequestService {
      * @throws ServiceException
      */
     @Transactional(rollbackOn = Exception.class)
-    public VacationRequestDto create(@Valid @NonNull VacationRequestRequest request) throws ServiceException {
+    public VacationRequestDto create(@NonNull VacationRequestRequest request) throws ServiceException {
         try {
-            Employee employee = employeeRepository.findByUuid(request.getEmployee())
-                .orElseThrow(() -> new InvalidRequestException("Employee not found."));
-            var vacationRequest = VacationRequest.builder()
+            Employee employee = employeeRepository.findById(30l)
+            .orElseThrow(() -> new InvalidRequestException("Employee not found."));
+var vacationRequest = VacationRequest.builder()
                     .isApproved(request.isApproved())
                     .requestStatusType(RequestStatusType.getRequestStatusType(request.getRequestStatusType()))
                     .employee(employee)

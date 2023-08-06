@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 @Service
 public class FileOCR {
+    public static boolean isDocument = false;
 
     public static void compare(int type, File file) throws Exception {
 
@@ -29,9 +31,12 @@ public class FileOCR {
         companyDataResource = new ClassPathResource("cnh.jpg");
         File fileCnh = companyDataResource.getFile();
 
+        
+        //if(isDocument){
         Mat rg = Imgcodecs.imread(fileRg.getAbsolutePath(), Imgcodecs.IMREAD_GRAYSCALE);
         Mat cnh = Imgcodecs.imread(fileCnh.getAbsolutePath(), Imgcodecs.IMREAD_GRAYSCALE);
         Mat cpf = Imgcodecs.imread(fileCpf.getAbsolutePath(), Imgcodecs.IMREAD_GRAYSCALE);
+        System.out.println(fileRg.getAbsolutePath());
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         ArrayList<Mat> pdfImages = new ArrayList<>();
         PdfReader reader = new PdfReader(file.getAbsolutePath());
@@ -66,13 +71,17 @@ public class FileOCR {
             }
 
             Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-            double maxSimilarity = mmr.maxVal;
-
-            if (maxSimilarity >= threshold) {
-                System.out.println("The PDF image " + i + " is in the same format as the fixed image. "+maxSimilarity);
+            
+            //}
+            //Random random = new Random();
+            double maxSimilarity = mmr.maxVal; //random.nextDouble(2f, 20f);
+            System.out.println("THE MAX: "+maxSimilarity);
+            if (maxSimilarity >= 50) {
+                System.out.println("The PDF image is in the same format as the fixed image. "+maxSimilarity);
             } else {
-                System.out.println("The PDF image " + i + " is NOT in the same format as the fixed image. "+maxSimilarity);
+                System.out.println("The PDF image  is NOT in the same format as the fixed image. "+maxSimilarity);
+            }
             }
         }
-    }
+
 }

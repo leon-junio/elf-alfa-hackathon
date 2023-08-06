@@ -16,6 +16,6 @@ public record TerminationRequestDto(
         int rank,
         @Min(0)
         int requestStatusType,
-        @NonNull Date terminationDate
+        Date terminationDate
 
 ) {}
