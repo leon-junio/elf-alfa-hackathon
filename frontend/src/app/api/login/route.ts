@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 
     response.cookies.set("token", `Bearer ${parsedData.token}`, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "strict",
       path: "/",
     })

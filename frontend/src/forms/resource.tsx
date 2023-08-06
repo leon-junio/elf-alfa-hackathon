@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { UserContext } from "@/components/user-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +27,7 @@ const ResourceForm = (props: ResourceFormProps) => {
     })
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
-        if(!user || !token) return toast({
+        if (!user || !token) return toast({
             title: "Você precisa estar logado para cadastrar um recurso",
             variant: "destructive",
         })
@@ -36,7 +37,7 @@ const ResourceForm = (props: ResourceFormProps) => {
             const formData = new FormData()
 
             Object.entries(data).forEach(([key, value]) => {
-                if(!value) return;
+                if (!value) return;
                 // @ts-ignore
                 if (value.file) {
                     // @ts-ignore
@@ -93,7 +94,7 @@ const ResourceForm = (props: ResourceFormProps) => {
                         </FormItem>
                     )}
                 />
-                 <FormField
+                <FormField
                     control={form.control}
                     name="filePath"
                     render={({ field }) => (
@@ -115,6 +116,27 @@ const ResourceForm = (props: ResourceFormProps) => {
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={form.control}
+                    name="isAvailable"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                                <FormLabel className="text-base">
+                                    Disponível
+                                </FormLabel>
+                                <FormDescription>
+                                   Este recurso está disponível para uso
+                                </FormDescription>
+                            </div>
+                            <FormControl>
+                                <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )} />
                 <Button type="submit" disabled={sending}>{sending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Cadastrar recurso</Button>
             </form>
         </Form>

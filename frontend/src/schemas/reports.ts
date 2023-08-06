@@ -8,9 +8,9 @@ const reportsSchema = z.object({
     role: z.string().min(1),
     employee: z.string().min(1).refine(isCPF, { message: 'CPF inválido' }).optional(),
     ocurrenceDescription: z.string().min(1),
-    latitude: z.string().min(1),
-    longitude: z.string().min(1),
-    pictures: z.array(fileSchema)
+    latitude: z.string().min(1).optional(),
+    longitude: z.string().min(1).optional(),
+    pictures: z.array(fileSchema).nonempty()
 })
 
 export default reportsSchema;

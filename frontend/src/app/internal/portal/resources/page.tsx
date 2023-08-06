@@ -14,11 +14,6 @@ const Page = () => {
     const { toast } = useToast()
 
     const onCreate = (data: any) => {
-        const newResource = {
-            ...data,
-            isAvailable: Boolean(data.isAvailable),
-            filePath: data.filePath ? data.filePath.name : null,
-        }
         setResourcesData((prev: any) => [...prev, data])
     }
 
@@ -42,7 +37,7 @@ const Page = () => {
 
     return (
         <div className="flex w-full space-x-4">
-            <div className="flex-1 border rounded-md p-3 h-min">
+            <div className="w-1/3 border rounded-md p-3 h-min">
                 <ResourceForm
                     onCreate={onCreate}
                 />

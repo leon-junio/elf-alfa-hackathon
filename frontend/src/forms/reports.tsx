@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -15,35 +17,39 @@ const ReportsForm = () => {
 
     const [resourceData, setResourceData] = useState<any>(null)
     const [roleData, setRoleData] = useState<any>(null)
-    const [employeeData, setEmployeeData] = useState<any>(null)
-    const [coordenatesData, setCountryData] = useState<any>(null)
+
+    const { toast } = useToast()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     })
 
-      const { ref: cpfRef } = useIMask(
+    const { ref: cpfRef } = useIMask(
         {
             mask: "000.000.000-00"
         },
-    );
+    )
 
+    const successFunction = async (data: z.infer<typeof formSchema>, coords: any) => {
+        if (!(coords)) {
+            return toast({
+                title: "Você precisa permitir a localização para enviar o relato",
+                variant: "destructive",
+            })
+        }
 
-    const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setSending(true)
         try {
             const formData = new FormData()
 
             Object.entries(data).forEach(([key, value]) => {
-                console.log(key, value)
-                if (key === 'dependants') {
+                if (!value) return;
+
+                if (key === 'pictures') {
                     // @ts-ignore
-                    value.forEach((dependant, index) => {
-                        Object.entries(dependant).forEach(([dependantKey, dependantValue]) => {
-                            // @ts-ignore
-                            //Alterar para um array de Objetos com os dados dos dependentes
-                            formData.append(`dependants[${index}][${dependantKey}]`, dependantValue)
-                        })
+                    value.forEach((picture: any) => {
+                        // @ts-ignore
+                        formData.append('pictures', picture.file)
                     })
                     // @ts-ignore
                 } else if (value.file) {
@@ -59,16 +65,49 @@ const ReportsForm = () => {
                 }
             })
 
-            await fetch(`${process.env.API_HOST}/external/employee`, {
+            formData.append("latitude", coords.latitude)
+            formData.append("longitude", coords.longitude)
+
+            const res = await fetch(`${process.env.API_HOST}/external/report`, {
                 method: "POST",
                 body: formData,
             })
+
+            if (res.status !== 200) throw new Error("Erro ao cadastrar recurso")
+
+            toast({
+                title: "Relato enviado com sucesso!",
+            })
         } catch (error) {
             console.error(error)
+            toast({
+                title: "Erro ao enviar relato",
+                variant: "destructive",
+            })
         } finally {
             setSending(false)
         }
     }
+
+
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((e) => {
+                successFunction(data, e.coords)
+            }, (error) => {
+                toast({
+                    title: "Você precisa permitir a localização para enviar o relato",
+                    variant: "destructive",
+                })
+            });
+        } else {
+            return toast({
+                title: "Geolocalização não suportada",
+                variant: "destructive",
+            })
+        }
+    }
+
     useEffect(() => {
         const fetchResource = async () => {
             const response = await fetch(`${process.env.API_HOST}/external/resource`, {
@@ -95,32 +134,13 @@ const ReportsForm = () => {
         fetchRole()
     }, [])
 
-    useEffect(() => {
-        const fetchEmployee = async () => {
-            const response = await fetch(`${process.env.API_HOST}/external/employee`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            const data = await response.json()
-            setEmployeeData(data)
-        }
-        fetchEmployee()
-    }, [])
-
-    useEffect(() => {
-        const fetchCoordenates = async () => {
-            const response = await fetch('')
-            const data = await response.json()
-            setCountryData(data)
-        }
-        fetchCoordenates()
-    }, [])
-
-  return (
-    
+    return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={(e) => {
+                form.handleSubmit(onSubmit, (error) => {
+                    console.error(error)
+                })(e)
+            }} className="space-y-8">
                 <FormField
                     control={form.control}
                     name="name"
@@ -177,50 +197,124 @@ const ReportsForm = () => {
                         <FormItem className="flex flex-col">
                             <FormLabel>CPF</FormLabel>
                             <FormControl>
-                                <Input placeholder="Digite seu CPF" {...field} ref={cpfRef as React.RefObject<HTMLInputElement>} />                            </FormControl>
+                                <Input placeholder="Digite seu CPF" {...field} ref={cpfRef as React.RefObject<HTMLInputElement>} />
+                            </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
                 <FormField
                     control={form.control}
-                    name="name"
+                    name="ocurrenceDescription"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Reletório</FormLabel>
+                            <FormLabel>Relatório</FormLabel>
                             <FormControl>
-                                <Input placeholder="Digite uma ocorrência, uma crítica ou uma ideia" {...field} />
+                                <Textarea placeholder="Digite uma ocorrência, uma crítica ou uma ideia" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                {/* location */}
-                {/* <FormField
-                    control={form.control}
-                    name="pictures"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Fotos</FormLabel>
-                            <FormControl>
-                                <Input type="file" multiple {...field}
-                                    value={field.value?.name}
-                                    onChange={(e) => {
-                                        const value = {
-                                            name: e.target.value,
-                                            file: e.target.files?.[0]
-                                        }
-                                        field.onChange(value)
-                                    }} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                /> */}
-                <Button type="submit" disabled={sending}>{sending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Entrar</Button>
+                <div className="flex flex-wrap space-x-2">
+                    <FormField
+                        control={form.control}
+                        name="pictures.0"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Foto 1</FormLabel>
+                                <FormControl>
+                                    <div className="relative overflow-hidden border border-dashed flex flex-col items-center justify-center w-80 h-80 rounded-md">
+                                        <Input className="absolute top-0 left-0 opacity-0 min-h-full min-w-full" type="file" accept="image/*" capture {...field}
+                                            value={field.value?.name}
+                                            onChange={(e) => {
+                                                if (!e.target.files?.[0]) return
+                                                const newValue = {
+                                                    name: e.target.value,
+                                                    file: e.target.files?.[0],
+                                                }
+                                                field.onChange(newValue)
+                                            }}>
+                                        </Input>
+                                        {field.value?.file ? (
+                                            // eslint-disable-next-line @next/next/no-img-element
+                                            <img src={URL.createObjectURL(field.value.file)} className="w-full h-full object-cover" alt="" />
+                                        ) : (
+                                            <p className="text-sm text-center">Arraste e solte ou clique aqui para adicionar uma foto</p>
+                                        )}
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="pictures.1"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Foto 2</FormLabel>
+                                <FormControl>
+                                    <div className="relative overflow-hidden border border-dashed flex flex-col items-center justify-center w-80 h-80 rounded-md">
+                                        <Input className="absolute top-0 left-0 opacity-0 min-h-full min-w-full" type="file" accept="image/*" capture {...field}
+                                            value={field.value?.name}
+                                            onChange={(e) => {
+                                                if (!e.target.files?.[0]) return
+                                                const newValue = {
+                                                    name: e.target.value,
+                                                    file: e.target.files?.[0],
+                                                }
+                                                field.onChange(newValue)
+                                            }}>
+                                        </Input>
+                                        {field.value?.file ? (
+                                            // eslint-disable-next-line @next/next/no-img-element
+                                            <img src={URL.createObjectURL(field.value.file)} className="w-full h-full object-cover" alt="" />
+                                        ) : (
+                                            <p className="text-sm text-center">Arraste e solte ou clique aqui para adicionar uma foto</p>
+                                        )}
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="pictures.2"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Foto 3</FormLabel>
+                                <FormControl>
+                                    <div className="relative overflow-hidden border border-dashed flex flex-col items-center justify-center w-80 h-80 rounded-md">
+                                        <Input className="absolute top-0 left-0 opacity-0 min-h-full min-w-full" type="file" accept="image/*" capture {...field}
+                                            value={field.value?.name}
+                                            onChange={(e) => {
+                                                if (!e.target.files?.[0]) return
+                                                const newValue = {
+                                                    name: e.target.value,
+                                                    file: e.target.files?.[0],
+                                                }
+                                                field.onChange(newValue)
+                                            }}>
+                                        </Input>
+                                        {field.value?.file ? (
+                                            // eslint-disable-next-line @next/next/no-img-element
+                                            <img src={URL.createObjectURL(field.value.file)} className="w-full h-full object-cover" alt="" />
+                                        ) : (
+                                            <p className="text-sm text-center">Arraste e solte ou clique aqui para adicionar uma foto</p>
+                                        )}
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
+                <Button type="submit" disabled={sending}>{sending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Enviar relatório</Button>
             </form>
         </Form>
-        
     )
 }
 
