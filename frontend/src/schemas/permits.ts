@@ -13,3 +13,5 @@ const permitsSchema = z.object({
     registerResources: z.boolean(),
 
 })
+
+export default permitsSchema;
