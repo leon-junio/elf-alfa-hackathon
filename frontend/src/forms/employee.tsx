@@ -3,6 +3,7 @@ import { Combobox } from "@/components/ui/combobox";
 import { DatePicker } from "@/components/ui/datepicker";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -102,6 +103,8 @@ const EmployeeForm = () => {
     const [cityData, setCityData] = useState<any>(null)
     const [roleData, setRoleData] = useState<any>(null)
 
+    const { toast } = useToast()
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     })
@@ -150,16 +153,14 @@ const EmployeeForm = () => {
             const formData = new FormData()
 
             Object.entries(data).forEach(([key, value]) => {
-                console.log(key, value)
+                if(!value) return;
+                
                 if (key === 'dependants') {
                     // @ts-ignore
-                    value.forEach((dependant, index) => {
-                        Object.entries(dependant).forEach(([dependantKey, dependantValue]) => {
-                            // @ts-ignore
-                            //Alterar para um array de Objetos com os dados dos dependentes
-                            formData.append(`dependants[${index}][${dependantKey}]`, dependantValue)
-                        })
-                    })
+                    formData.append(key, JSON.stringify(value.map((dependant: any) => ({
+                        ...dependant,
+                        birthday: dependant.birthday.toISOString().split('T')[0]
+                    }))))
                     // @ts-ignore
                 } else if (value.file) {
                     // @ts-ignore
@@ -174,62 +175,88 @@ const EmployeeForm = () => {
                 }
             })
 
-            await fetch(`${process.env.API_HOST}/external/employee`, {
+            const res = await fetch(`${process.env.API_HOST}/external/employee`, {
                 method: "POST",
                 body: formData,
             })
+
+            if(res.status !== 200) throw new Error('Erro ao enviar cadastro')
+
+            toast({
+                title: 'Sucesso! Cadastro enviado com sucesso',
+            })
         } catch (error) {
             console.error(error)
+            toast({
+                title: 'Erro! Não foi possível enviar o cadastro',
+                variant: 'destructive'
+            })
         } finally {
             setSending(false)
         }
     }
 
     useEffect(() => {
-        const fetchCountry = async () => {
-            const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/paises')
-            const data = await response.json()
-            setCountryData(data)
+        try {
+            const fetchCountry = async () => {
+                const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/paises')
+                const data = await response.json()
+                setCountryData(data)
+            }
+            fetchCountry()
+        } catch (error) {
+            console.error(error)
         }
-        fetchCountry()
     }, [])
 
     useEffect(() => {
-        const fetchRole = async () => {
-            const response = await fetch(`${process.env.API_HOST}/external/role`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            const data = await response.json()
-            setRoleData(data)
+        try {
+            const fetchRole = async () => {
+                const response = await fetch(`${process.env.API_HOST}/external/role`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                const data = await response.json()
+                setRoleData(data)
+            }
+            fetchRole()
+        } catch (error) {
+            console.error(error)
         }
-        fetchRole()
     }, [])
 
     useEffect(() => {
-        if (!isBrasil) return;
+        try {
+            if (!isBrasil) return;
 
-        const fetchState = async () => {
-            const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados`)
-            const data = await response.json()
-            setStateData(data)
-        }
-        if (watchCountry) {
-            fetchState()
+            const fetchState = async () => {
+                const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados`)
+                const data = await response.json()
+                setStateData(data)
+            }
+            if (watchCountry) {
+                fetchState()
+            }
+        } catch (error) {
+            console.error(error)
         }
     }, [watchCountry, isBrasil])
 
     useEffect(() => {
-        const fetchCity = async () => {
-            const state = stateData?.find((state: any) => state.nome === watchState)
-            if (!state) return
-            const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state.id}/municipios`)
-            const data = await response.json()
-            setCityData(data)
-        }
-        if (watchState) {
-            fetchCity()
+        try {
+            const fetchCity = async () => {
+                const state = stateData?.find((state: any) => state.nome === watchState)
+                if (!state) return
+                const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state.id}/municipios`)
+                const data = await response.json()
+                setCityData(data)
+            }
+            if (watchState) {
+                fetchCity()
+            }
+        } catch (error) {
+            console.error(error)
         }
     }, [watchState, stateData])
 
@@ -350,7 +377,7 @@ const EmployeeForm = () => {
                     control={form.control}
                     name="birthday"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex flex-col">
                             <FormLabel>Data de nascimento</FormLabel>
                             <FormControl>
                                 <DatePicker {...field} />
@@ -712,7 +739,7 @@ const EmployeeForm = () => {
                     control={form.control}
                     name="rgExpeditionDate"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex flex-col">
                             <FormLabel>Data de expedição</FormLabel>
                             <FormControl>
                                 <DatePicker {...field} />

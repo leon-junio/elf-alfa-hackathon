@@ -5,13 +5,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
     const { pathname } = new URL(request.url);
+    const headers = new Headers(request.headers)
+    headers.set("x-pathname", request.nextUrl.pathname)
 
-    console.log(pathname)
     if (pathname.startsWith("/internal") && !pathname.startsWith("/internal/login") && !request.cookies.get('token')) {
-        return NextResponse.redirect(new URL("/internal/login", request.url))
+        return NextResponse.redirect(new URL("/internal/login", request.url), {
+            headers: headers
+        })
     } else if (pathname.startsWith("/internal") && pathname.startsWith("/internal/login") && request.cookies.get('token')) {
-        return NextResponse.redirect(new URL("/internal/dashboard", request.url))
+        return NextResponse.redirect(new URL("/internal/candidates", request.url), {
+            headers: headers
+        })
     }
 
-    return NextResponse.next();
+
+    return NextResponse.next({
+        headers: headers
+    });
 }
