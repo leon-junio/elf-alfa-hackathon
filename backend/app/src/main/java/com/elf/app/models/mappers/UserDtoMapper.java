@@ -17,9 +17,10 @@ public class UserDtoMapper implements Function<User, UserDTO> {
      * @return UserDTO object
      */
     public UserDTO apply(User user) {
+        var employee = user.getEmployee();
         return new UserDTO(
                 user.getCpf(),
-                user.getEmployee().getUuid()
-                );
+                employee.getUuid(),
+                employee);
     }
 }

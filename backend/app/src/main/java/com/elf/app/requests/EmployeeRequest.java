@@ -103,4 +103,6 @@ public class EmployeeRequest {
     @Min(0)
     private int employeeStatus;
     private String dependents;
+    @Min(0)
+    private int status;
 }

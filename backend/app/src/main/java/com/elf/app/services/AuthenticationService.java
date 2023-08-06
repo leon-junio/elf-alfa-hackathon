@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.elf.app.dtos.responses.AuthenticationResponse;
 import com.elf.app.models.Employee;
 import com.elf.app.models.User;
+import com.elf.app.providers.WhatsappBuilder;
 import com.elf.app.repositories.EmployeeRepository;
 import com.elf.app.repositories.UserRepository;
 import com.elf.app.requests.AuthenticationRequest;
@@ -33,7 +34,6 @@ public class AuthenticationService {
          */
         public AuthenticationResponse signup(Employee request) {
                 String genPass = "" + request.getName().length() + random.nextInt(1000);
-                System.out.println("senha: " + genPass);
                 var user = User.builder()
                                 .cpf(request.getCpf())
                                 .password(passwordEncoder.encode(genPass))
@@ -42,6 +42,13 @@ public class AuthenticationService {
                                 .enabled(true)
                                 .build();
                 repository.save(user);
+                try {
+                        WhatsappBuilder.send("Novo usuario cadastrado no sistema.\nSenha de acesso: " + genPass,
+                                        user.getEmployee());
+                        System.out.println("whatsapp: connection -> " + 12203);
+                } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                }
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
                                 .token(jwtToken)
@@ -55,8 +62,6 @@ public class AuthenticationService {
          * @return AuthenticationResponse with the token
          */
         public AuthenticationResponse signin(AuthenticationRequest request) {
-                System.out.println(request);
-                System.out.println(request.getCpf().replace(".", "").replace("-", ""));
                 authenticationManager
                                 .authenticate(new UsernamePasswordAuthenticationToken(
                                                 request.getCpf().replace(".", "").replace("-", ""),

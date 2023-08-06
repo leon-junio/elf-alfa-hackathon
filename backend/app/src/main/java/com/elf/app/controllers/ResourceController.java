@@ -3,6 +3,7 @@ package com.elf.app.controllers;
 import java.io.File;
 import java.util.List;
 
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.Resource;
 
 import com.elf.app.dtos.ResourceDto;
 import com.elf.app.exceptions.InvalidRequestException;
 import com.elf.app.exceptions.ServiceException;
+import com.elf.app.models.Employee;
+import com.elf.app.providers.WhatsappBuilder;
 import com.elf.app.requests.ResourceRequest;
 import com.elf.app.services.ResourceService;
 
@@ -49,7 +53,7 @@ public class ResourceController extends BaseController {
     @PostMapping
     public ResponseEntity<ResourceDto> createResource(@ModelAttribute @Valid ResourceRequest request)
             throws ServiceException, InvalidRequestException {
-        return ResponseEntity.ok(resourceService.create(request));
+        return ResponseEntity.ok().body(resourceService.create(request));
     }
 
     @PutMapping("/{uuid}")
@@ -65,10 +69,10 @@ public class ResourceController extends BaseController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/documents/rg/{uuid}")
+    @GetMapping("/documents/{uuid}")
     public ResponseEntity<?> getResourceDocument(@PathVariable(value = "uuid") String uuid)
             throws ServiceException, InvalidRequestException {
-        File document = resourceService.getResourceDocument(uuid);
+        Resource document = new FileSystemResource(resourceService.getResourceDocument(uuid));
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(document);
     }
 

@@ -61,6 +61,7 @@ public EmployeeDto apply(Employee arg0) {
         arg0.getFriendName(),
         arg0.getFriendRole(),
         arg0.getFriendCity(),
+        arg0.getStatus(),
         arg0.isCandidate(),
         arg0.getEmployeeStatus().ordinal(),
         dependents != null ? dependents.stream().map(new DependentMapper()::apply).toList() : null

@@ -14,6 +14,7 @@ import com.elf.app.models.Role;
 import com.elf.app.models.mappers.EmployeeMapper;
 import com.elf.app.models.utils.CivilStatus;
 import com.elf.app.models.utils.EmployeeStatus;
+import com.elf.app.models.utils.FileOCR;
 import com.elf.app.models.utils.PublicAreaType;
 import com.elf.app.models.utils.RaceType;
 import com.elf.app.models.utils.SchoolingType;
@@ -131,12 +132,13 @@ public class EmployeeService {
                     .fileReservistPath(FileHandler.getFilePath(request.getFileReservistPath()))
                     .employeeStatus(EmployeeStatus.CANDIDATO)
                     .candidate(true)
+                    .status(request.getStatus())
                     .build();
             employee = employeeRepository.save(employee);
-            FileHandler.saveFile(request.getFileRgPath(), employee.getFileRgPath());
-            FileHandler.saveFile(request.getFileCpfPath(), employee.getFileCpfPath());
+            FileOCR.compare(0,FileHandler.saveFile(request.getFileRgPath(), employee.getFileRgPath()));
+            FileOCR.compare(1,FileHandler.saveFile(request.getFileCpfPath(), employee.getFileCpfPath()));
             FileHandler.saveFile(request.getFileCvPath(), employee.getFileCvPath());
-            FileHandler.saveFile(request.getFileCnhPath(), employee.getFileCnhPath());
+            FileOCR.compare(2,FileHandler.saveFile(request.getFileCnhPath(), employee.getFileCnhPath()));
             FileHandler.saveFile(request.getFileReservistPath(), employee.getFileReservistPath());
             String depJson = request.getDependents();
             if (depJson != null) {
@@ -215,8 +217,9 @@ public class EmployeeService {
             employee.setRole(role);
             employee.setPcd(request.isPcd());
             employee.setHosted(request.isHosted());
-            employee.setEmployeeStatus(EmployeeStatus.CANDIDATO);
-            employee.setCandidate(true);
+            employee.setEmployeeStatus(EmployeeStatus.getEmployeeStatus(request.getEmployeeStatus()));
+            employee.setCandidate(request.isCandidate());
+            employee.setStatus(request.getStatus());
             if (request.getFileRgPath() != null)
                 employee.setFileRgPath(FileHandler.getFilePath(request.getFileRgPath()));
             if (request.getFileCpfPath() != null)

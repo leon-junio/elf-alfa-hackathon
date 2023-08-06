@@ -140,8 +140,10 @@ public class Employee {
     private String friendCity;
     private boolean candidate;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private EmployeeStatus employeeStatus;
+
+    @Column(nullable = false)
+    private int status;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Dependent> dependents;

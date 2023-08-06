@@ -6,9 +6,12 @@ import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.elf.app.models.utils.PdfCompressor;
+
 public class FileHandler {
 
-    public static final String FILE_PATH = "C:/docs/";
+    public static final String FILE_FOLDER = "C:";
+    public static final String FILE_PATH = "/docs/";
     public static final String DOCUMENT_TYPE = ".pdf";
 
     /**
@@ -31,17 +34,24 @@ public class FileHandler {
      * @param path Path to save the file
      * @return
      */
-    public static boolean saveFile(MultipartFile file, String path) {
+    public static File saveFile(MultipartFile file, String path) {
+        File filer = null;
         try {
             if (file == null) {
-                return false;
+                return null;
             }
-            file.transferTo(new File(path));
+            filer = new File(FILE_FOLDER + path);
+            file.transferTo(filer);
+            try{
+            PdfCompressor.manipulatePdf(new File(FILE_FOLDER + path).getAbsolutePath(),FILE_FOLDER + path);
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            return false;
+            return null;
         }
-        return true;
+        return filer;
     }
 
     /**
@@ -54,7 +64,7 @@ public class FileHandler {
         boolean status = false;
         try {
             for (String path : paths) {
-                File file = new File(path);
+                File file = new File(FILE_FOLDER + path);
                 status = file.delete();
             }
         } catch (Exception e) {
@@ -70,6 +80,6 @@ public class FileHandler {
      * @return File from the server
      */
     public static File getFile(String path) {
-        return new File(path);
+        return new File(FILE_FOLDER + path);
     }
 }

@@ -53,6 +53,7 @@ public record EmployeeDto(
                 String friendName,
                 String friendRole,
                 String friendCity,
+                int status,
                 boolean candidate,
                 int employeeStatus,
                 List<DependentDto> dependents) {
