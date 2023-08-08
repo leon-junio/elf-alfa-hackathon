@@ -1,3 +1,11 @@
+## Site de amostragem da aplicação:
+https://elf.servehttp.com:8023/internal/login
+https://elf.servehttp.com:8023/report
+https://elf.servehttp.com:8023
+
+## Documentação da API: 
+https://elf.servehttp.com:8030/swagger-docs.html
+
 # elf-alfa-hackathon repo
 
 Repositório do projeto para a Alfa Hackathon 2023. Backend e frontend inclusos nesse repositório. Autores: Edmar, Felipe e Leon. Faculdade: PUC Minas Praça da Liberdade.
