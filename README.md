@@ -4,7 +4,7 @@
 - https://elf.servehttp.com:8023
 
 ## Documentação da API: 
-- https://elf.servehttp.com:8030/swagger-docs.html
+- https://elf.servehttp.com:8030/swagger-ui.html
 
 # elf-alfa-hackathon repo
 
